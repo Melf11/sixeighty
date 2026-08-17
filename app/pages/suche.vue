@@ -12,17 +12,11 @@ const q = ref((route.query.q as string) || '')
 const cat = ref<DocCategory | ''>((route.query.cat as DocCategory) || '')
 const model = ref<string>((route.query.model as string) || '')
 
-const searchQuery = computed(() => ({
+const { data, pending } = useDocSearch(() => ({
   q: q.value.trim(),
   cat: cat.value,
   model: model.value,
 }))
-
-const { data, status } = await useFetch('/api/search', {
-  query: searchQuery,
-  watch: [searchQuery],
-  immediate: !!q.value.trim(),
-})
 
 watch([q, cat, model], () => {
   router.replace({ query: {
@@ -89,7 +83,7 @@ const examples = ['Ventilspiel', 'Einspritzpumpe', 'Radbremszylinder', 'Verteile
     </div>
 
     <div v-else class="mt-6">
-      <p v-if="status === 'pending'" class="kennziffer animate-pulse">Suche läuft …</p>
+      <p v-if="pending" class="kennziffer animate-pulse">Suche läuft …</p>
 
       <template v-else-if="data">
         <div v-if="!data.indexed" class="plate border-stamp p-5 text-sm">

@@ -6,21 +6,16 @@ import { KNOWN_PARTS } from '~/data/wartung'
 useHead({ title: 'Teilenummern — Steyr 680 Nachschlagewerk' })
 
 const vehicle = useVehicle()
-const q = ref('')
+const route = useRoute()
+const q = ref((route.query.q as string) || '')
 const model = ref<string>(vehicle.value || '')
 
-const searchQuery = computed(() => ({
+const { data, pending } = useDocSearch(() => ({
   q: q.value.trim(),
   cat: 'teile',
   model: model.value,
   limit: '60',
 }))
-
-const { data, status } = await useFetch('/api/search', {
-  query: searchQuery,
-  watch: [searchQuery],
-  immediate: false,
-})
 
 const partDocs = computed(() => DOCS.filter(d =>
   d.category === 'teile' && (!model.value || d.models.includes(model.value)),
@@ -68,7 +63,7 @@ function highlight(text: string): string {
       </form>
 
       <div v-if="q.trim().length >= 2" class="mt-4">
-        <p v-if="status === 'pending'" class="kennziffer animate-pulse">Suche läuft …</p>
+        <p v-if="pending" class="kennziffer animate-pulse">Suche läuft …</p>
         <template v-else-if="data">
           <div v-if="!data.indexed" class="border border-stamp bg-stamp-wash p-4 text-sm text-ink-soft">
             Volltextindex noch nicht erzeugt — nach Abschluss der OCR <code class="font-mono">npm run index</code> ausführen.
