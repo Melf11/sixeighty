@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DOCS, CATEGORIES, type DocCategory } from '~/data/docs'
+import { LIBRARY_DOCS, CATEGORIES, docById, type DocCategory } from '~/data/docs'
 import { VEHICLES, vehicleById } from '~/data/vehicles'
 
 useHead({ title: 'Dokumente — Steyr 680 Nachschlagewerk' })
@@ -19,14 +19,20 @@ watch([catFilter, modelFilter], () => {
   } })
 })
 
-const filtered = computed(() => DOCS.filter(d =>
+const filtered = computed(() => LIBRARY_DOCS.filter(d =>
   (!catFilter.value || d.category === catFilter.value)
   && (!modelFilter.value || d.models.includes(modelFilter.value))
   && (!text.value || d.title.toLowerCase().includes(text.value.toLowerCase())),
 ))
 
+// Nur Kategorien anbieten, in denen die Bibliothek tatsächlich Dokumente hat
+const usedCategories = computed(() => {
+  const used = new Set(LIBRARY_DOCS.map(d => d.category))
+  return (Object.entries(CATEGORIES) as [DocCategory, string][]).filter(([k]) => used.has(k))
+})
+
 const grouped = computed(() => {
-  const map = new Map<DocCategory, typeof DOCS>()
+  const map = new Map<DocCategory, typeof LIBRARY_DOCS>()
   for (const d of filtered.value) {
     if (!map.has(d.category)) map.set(d.category, [])
     map.get(d.category)!.push(d)
@@ -56,7 +62,7 @@ const grouped = computed(() => {
       </select>
       <select v-model="catFilter" class="field !w-auto cursor-pointer">
         <option value="">Alle Kategorien</option>
-        <option v-for="(label, key) in CATEGORIES" :key="key" :value="key">{{ label }}</option>
+        <option v-for="[key, label] in usedCategories" :key="key" :value="key">{{ label }}</option>
       </select>
     </div>
 
@@ -83,6 +89,9 @@ const grouped = computed(() => {
               <h3 class="text-sm font-semibold leading-snug group-hover:text-olive transition-colors">{{ d.title }}</h3>
               <p class="kennziffer mt-1">
                 {{ d.models.join(' · ') }} — {{ d.pages }} Seiten<template v-if="d.note"> · {{ d.note }}</template>
+              </p>
+              <p v-if="d.excerptOf && docById(d.excerptOf)" class="kennziffer mt-0.5 text-blueprint">
+                Auszug aus: {{ docById(d.excerptOf)!.title }}
               </p>
             </div>
           </NuxtLink>

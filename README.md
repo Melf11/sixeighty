@@ -79,6 +79,25 @@ sudo mkdir -p /opt/sixeighty && sudo chown "$USER" /opt/sixeighty
 git tag v1.0.0 && git push origin main --tags
 ```
 
+## Umgang mit Dubletten
+
+Die Sammlung enthält denselben Inhalt teilweise mehrfach — die Werkstatt-Register 1–11
+sind Zweitscans der Kapitel aus dem Reparaturhandbuch 680 M (Textabgleich: 82–100 %
+Deckung). Statt sie zu löschen:
+
+- **Bibliothek** (`LIBRARY_DOCS`) blendet Dokumente mit `excerptOf` aus → 32 statt 43 Einträge.
+- **Reparaturhandbuch** bekommt stattdessen ein **Kapitelregister** (`REPAIR_CHAPTERS`),
+  das direkt auf die Blattnummern springt und den jeweiligen Zweitscan verlinkt.
+- **Suche** fasst inhaltsgleiche Seiten zu einem Treffer zusammen (Cluster werden beim
+  Index-Build über Shingle-Ähnlichkeit erkannt) und zeigt die weiteren Fundorte als
+  „Gleiche Seite auch in: …".
+- Alle PDFs bleiben auf der Platte und über `/dokumente/<id>` erreichbar — bei schlecht
+  lesbaren Stellen ist der Zweitscan oft die bessere Vorlage.
+
+Nicht entfernt wurden Dokumente mit eigenständigem Inhalt, u. a. die Bestandteillisten
+aus Register 12 (bis 100 % einzigartig) und der Ersatzteilkatalog der Schweizer Armee
+(60 % einzigartig gegenüber dem A680g-Katalog).
+
 ## Kuratierte Daten
 
 - `app/data/specs.ts` — Modellvergleich (aus den Original-Datenblättern übertragen)

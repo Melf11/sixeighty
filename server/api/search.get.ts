@@ -1,7 +1,15 @@
 import MiniSearch from 'minisearch'
 import { DOCS } from '../../app/data/docs'
 
-interface PageEntry { d: string, p: number, t: string }
+interface PageEntry {
+  d: string
+  p: number
+  t: string
+  /** Cluster inhaltsgleicher Seiten (mehrere Scans derselben Vorlage) */
+  c?: number
+  /** 1 = Sekundärkopie; die Primärseite des Clusters ist die vollständigere Quelle */
+  dup?: number
+}
 
 let indexPromise: Promise<{ mini: MiniSearch, pages: Map<string, PageEntry> }> | null = null
 
@@ -69,11 +77,43 @@ export default defineEventHandler(async (event) => {
     return true
   })
 
+  // Inhaltsgleiche Seiten (z. B. Werkstatt-Register = Kopien aus dem
+  // Reparaturhandbuch) zu einem Treffer zusammenfassen. Angezeigt wird der
+  // bestbewertete Fund; die weiteren Fundorte hängen als `alsoIn` daran.
   const max = Math.min(Number(limit) || 40, 100)
-  const results = filtered.slice(0, max).map((r) => {
+  const seenCluster = new Map<number, number>() // Cluster → Index in results
+  const results: Array<{
+    docId: string
+    title: string
+    category: string
+    models: string[]
+    page: number
+    score: number
+    snippet: string
+    alsoIn: Array<{ docId: string, title: string, page: number }>
+  }> = []
+  let collapsed = 0
+
+  for (const r of filtered) {
     const entry = pages.get(String(r.id))!
     const meta = docMeta.get(entry.d)!
-    return {
+
+    if (entry.c !== undefined) {
+      const existing = seenCluster.get(entry.c)
+      if (existing !== undefined) {
+        // Dublette: nur als alternativer Fundort vermerken
+        const target = results[existing]!
+        if (target.alsoIn.length < 4 && !target.alsoIn.some(a => a.docId === entry.d)) {
+          target.alsoIn.push({ docId: entry.d, title: meta.title, page: entry.p })
+        }
+        collapsed++
+        continue
+      }
+      seenCluster.set(entry.c, results.length)
+    }
+
+    if (results.length >= max) { collapsed++; continue }
+    results.push({
       docId: entry.d,
       title: meta.title,
       category: meta.category,
@@ -81,8 +121,14 @@ export default defineEventHandler(async (event) => {
       page: entry.p,
       score: Math.round(r.score * 10) / 10,
       snippet: makeSnippet(entry.t, r.queryTerms),
-    }
-  })
+      alsoIn: [],
+    })
+  }
 
-  return { total: filtered.length, indexed, results }
+  return {
+    total: filtered.length - collapsed,
+    rawTotal: filtered.length,
+    indexed,
+    results,
+  }
 })

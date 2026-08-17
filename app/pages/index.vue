@@ -45,6 +45,13 @@ const sections = [
     <!-- Titelblatt -->
     <section class="sheet-in relative plate p-6 sm:p-10 overflow-hidden">
       <div class="absolute top-4 right-4 stamp text-stamp -rotate-3">Techn. Archiv</div>
+      <!-- Werksmarke als Wasserzeichen -->
+      <img
+        src="/img/steyr-logo.png"
+        alt=""
+        aria-hidden="true"
+        class="pointer-events-none absolute -right-16 -bottom-20 hidden w-80 opacity-[0.07] sm:block"
+      >
       <p class="kennziffer mb-2">Steyr-Daimler-Puch AG · Werke Steyr</p>
       <h1 class="h-display text-5xl sm:text-7xl max-w-3xl">
         Steyr Lastkraftwagen<br>

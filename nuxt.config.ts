@@ -14,6 +14,9 @@ export default defineNuxtConfig({
       meta: [
         { name: 'viewport', content: 'width=device-width, initial-scale=1' },
       ],
+      link: [
+        { rel: 'icon', type: 'image/png', href: '/img/steyr-logo.png' },
+      ],
     },
   },
   ignore: ['680/**'],

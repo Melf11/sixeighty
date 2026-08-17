@@ -83,6 +83,15 @@ function highlight(text: string): string {
                   <!-- eslint-disable-next-line vue/no-v-html -->
                   <p class="mt-1.5 font-mono text-xs leading-relaxed text-ink-soft" v-html="highlight(r.snippet)" />
                 </NuxtLink>
+                <p v-if="r.alsoIn?.length" class="kennziffer mt-1 pl-4">
+                  Gleiche Seite auch in:
+                  <NuxtLink
+                    v-for="(a, ai) in r.alsoIn"
+                    :key="a.docId + a.page"
+                    :to="{ path: `/dokumente/${a.docId}`, query: { page: a.page } }"
+                    class="underline decoration-line underline-offset-2 hover:text-olive"
+                  >{{ a.title }} (Bl. {{ a.page }}){{ ai < r.alsoIn.length - 1 ? ',' : '' }}&nbsp;</NuxtLink>
+                </p>
               </li>
             </ol>
             <p v-if="data.total === 0" class="text-sm text-ink-soft">

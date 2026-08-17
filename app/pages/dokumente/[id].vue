@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { DOCS, CATEGORIES, docById, docUrl } from '~/data/docs'
+import { LIBRARY_DOCS, CATEGORIES, REPAIR_CHAPTERS, docById, docUrl } from '~/data/docs'
 
 const route = useRoute()
 const doc = computed(() => docById(route.params.id as string))
@@ -19,9 +19,23 @@ function goToPage() {
   viewerKey.value++
 }
 
+// Kapitelnavigation: entspricht der Registereinteilung des Werkstattordners
+const chapters = computed(() => doc.value?.id === 'm-reparatur' ? REPAIR_CHAPTERS : [])
+// Wenn dieses Dokument ein Register-Zweitscan ist: passendes Kapitel im Handbuch
+const chapterOfThis = computed(() => REPAIR_CHAPTERS.find(c => c.altDocId === doc.value?.id))
+// Kapitel, in dem das aktuell angezeigte Blatt liegt
+const activeChapter = computed(() =>
+  chapters.value.find(c => page.value >= c.page && page.value <= c.endPage),
+)
+
+function openChapter(target: number) {
+  page.value = target
+  goToPage()
+}
+
 const related = computed(() => {
   if (!doc.value) return []
-  return DOCS.filter(d =>
+  return LIBRARY_DOCS.filter(d =>
     d.id !== doc.value!.id
     && d.category === doc.value!.category
     && d.models.some(m => doc.value!.models.includes(m)),
@@ -39,6 +53,14 @@ const related = computed(() => {
           <span class="stamp mr-2 text-olive">{{ CATEGORIES[doc.category] }}</span>
           {{ doc.models.join(' · ') }} — {{ doc.pages }} Seiten
         </p>
+        <p v-if="doc.excerptOf && docById(doc.excerptOf)" class="kennziffer mt-1 text-blueprint">
+          Zweitscan aus dem Werkstattordner — inhaltlich ein Auszug aus
+          <NuxtLink
+            :to="{ path: `/dokumente/${doc.excerptOf}`, query: chapterOfThis ? { page: chapterOfThis.page } : {} }"
+            class="underline underline-offset-2 hover:text-olive"
+          >{{ docById(doc.excerptOf)!.title }}<template v-if="chapterOfThis"> (Blatt {{ chapterOfThis.page }})</template></NuxtLink>.
+          Nicht in der Bibliothek gelistet, aber bei schlecht lesbaren Stellen als Zweitmeinung nützlich.
+        </p>
       </div>
       <form class="flex items-center gap-2" @submit.prevent="goToPage">
         <label class="kennziffer" for="page-input">Blatt-Nr.</label>
@@ -47,6 +69,31 @@ const related = computed(() => {
         <a :href="viewerUrl" target="_blank" class="h-display border border-ink bg-card px-4 py-2 hover:shadow-plate transition-all">Neuer Tab ↗</a>
       </form>
     </header>
+
+    <!-- Kapitelregister (nur Reparaturhandbuch) -->
+    <nav v-if="chapters.length" class="mb-4">
+      <p class="kennziffer mb-2">
+        Kapitelregister — entspricht den Reitern des Werkstattordners.
+        <template v-if="activeChapter">
+          Aktuell: {{ activeChapter.no }} · {{ activeChapter.title }} —
+          <NuxtLink :to="`/dokumente/${activeChapter.altDocId}`" class="underline underline-offset-2 hover:text-olive">
+            Zweitscan dieses Kapitels ansehen
+          </NuxtLink>
+        </template>
+      </p>
+      <div class="flex flex-wrap gap-1.5">
+        <button
+          v-for="c in chapters"
+          :key="c.no"
+          class="tab-register cursor-pointer !top-0 !border-b"
+          :class="page >= c.page && page <= c.endPage ? '!bg-olive !text-card !border-olive-deep' : ''"
+          :title="`Blatt ${c.page}–${c.endPage}`"
+          @click="openChapter(c.page)"
+        >
+          {{ c.no }} · {{ c.title }}
+        </button>
+      </div>
+    </nav>
 
     <div class="plate overflow-hidden">
       <iframe

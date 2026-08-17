@@ -14,7 +14,7 @@ export interface Fault {
   system: string
   hints?: string
   causes: FaultCause[]
-  docs: { docId: string, label: string }[]
+  docs: { docId: string, label: string, page?: number }[]
 }
 
 export const FAULT_SYSTEMS = [
@@ -39,7 +39,7 @@ export const FAULTS: Fault[] = [
       { cause: 'Hauptschalter / Schaltkasten defekt (A680g: Position 0–3)', check: 'Spannung hinter dem Schaltkasten prüfen', remedy: 'Kontakte reinigen oder Schalter ersetzen' },
     ],
     docs: [
-      { docId: 'r10-elektrik', label: 'Register 10 — Elektrische Anlage' },
+      { docId: 'm-reparatur', page: 263, label: 'Reparaturhandbuch: Elektrische Anlage' },
       { docId: 'g-betrieb-2aufl', label: 'Betriebsanleitung A680g: Elektrische Anlage / Batterien' },
     ],
   },
@@ -56,9 +56,8 @@ export const FAULTS: Fault[] = [
       { cause: 'Falscher Förderbeginn nach Arbeiten an der Einspritzpumpe', check: 'Förderbeginn prüfen (A680g WD 610r: 22 ± 1° vor OT)', remedy: 'Pumpe nach Reparaturhandbuch neu einstellen' },
     ],
     docs: [
-      { docId: 'm-reparatur', label: 'Reparaturhandbuch 680M/M3: Kraftstoffanlage' },
       { docId: 'g-betrieb-2aufl', label: 'Betriebsanleitung A680g: Einspritzpumpe und Düsen (ab S. 42)' },
-      { docId: 'r1-motor', label: 'Register 1 — Motor' },
+      { docId: 'm-reparatur', page: 13, label: 'Reparaturhandbuch: Motor' },
     ],
   },
   {
@@ -72,7 +71,7 @@ export const FAULTS: Fault[] = [
       { cause: 'Ventilspiel falsch', check: 'Ventilspiel kalt messen: Einlaß 0,2 mm, Auslaß 0,3 mm (A680g) bzw. 0,35 mm (680M/M3)', remedy: 'Ventile einstellen' },
     ],
     docs: [
-      { docId: 'r1-motor', label: 'Register 1 — Motor' },
+      { docId: 'm-reparatur', page: 13, label: 'Reparaturhandbuch: Motor' },
       { docId: 'm-techdaten', label: 'Werksdatenblatt: Einspritzausrüstung' },
     ],
   },
@@ -88,8 +87,8 @@ export const FAULTS: Fault[] = [
       { cause: 'Zylinderkopfdichtung defekt, Wasser im Brennraum (weiß, süßlicher Geruch)', check: 'Kühlwasserstand fällt? Blasen im Kühler bei laufendem Motor?', remedy: 'Kopfdichtung erneuern, Kopf planen lassen' },
     ],
     docs: [
-      { docId: 'r11-oelverbrauch', label: 'Register 11 — Öl-Verbrauchsmeßfahrt' },
-      { docId: 'r1-motor', label: 'Register 1 — Motor' },
+      { docId: 'm-reparatur', page: 279, label: 'Reparaturhandbuch: Öl-Verbrauchsmeßfahrt' },
+      { docId: 'm-reparatur', page: 13, label: 'Reparaturhandbuch: Motor' },
     ],
   },
   {
@@ -105,8 +104,7 @@ export const FAULTS: Fault[] = [
       { cause: 'Überdruckventil der Doppelzahnradpumpe hängt', check: 'Druck auch kalt zu niedrig', remedy: 'Ventil reinigen/einstellen nach Reparaturhandbuch' },
     ],
     docs: [
-      { docId: 'r1-motor', label: 'Register 1 — Motor' },
-      { docId: 'm-reparatur', label: 'Reparaturhandbuch 680M/M3: Schmierung' },
+      { docId: 'm-reparatur', page: 13, label: 'Reparaturhandbuch: Motor' },
     ],
   },
   {
@@ -122,7 +120,7 @@ export const FAULTS: Fault[] = [
     ],
     docs: [
       { docId: 'g-betrieb-2aufl', label: 'Betriebsanleitung A680g: Kühlanlage (ab S. 57)' },
-      { docId: 'r1-motor', label: 'Register 1 — Motor' },
+      { docId: 'm-reparatur', page: 13, label: 'Reparaturhandbuch: Motor' },
     ],
   },
   {
@@ -152,8 +150,8 @@ export const FAULTS: Fault[] = [
       { cause: 'Schaltgestänge ausgeschlagen', check: 'Spiel am Gestänge bei festgehaltenem Hebel', remedy: 'Buchsen/Gelenke erneuern, einstellen' },
     ],
     docs: [
-      { docId: 'r2-getriebe', label: 'Register 2 — Getriebe' },
-      { docId: 'r3-verteilergetriebe', label: 'Register 3 — Verteilergetriebe' },
+      { docId: 'm-reparatur', page: 99, label: 'Reparaturhandbuch: Getriebe' },
+      { docId: 'm-reparatur', page: 111, label: 'Reparaturhandbuch: Verteilergetriebe' },
     ],
   },
   {
@@ -169,7 +167,7 @@ export const FAULTS: Fault[] = [
       { cause: 'Einseitiges Ziehen: ungleich eingestellte Bremsen oder defekter Zylinder', check: 'Bremsprobe auf ebener, freier Fläche', remedy: 'Nachstellen nach Handbuch, defekte Teile ersetzen' },
     ],
     docs: [
-      { docId: 'r7-bremsen', label: 'Register 7 — Bremsen' },
+      { docId: 'm-reparatur', page: 179, label: 'Reparaturhandbuch: Bremsen' },
       { docId: 'g-betrieb-2aufl', label: 'Betriebsanleitung A680g: Bremsanlage / Druckluftanlage (ab S. 101)' },
     ],
   },
@@ -185,7 +183,7 @@ export const FAULTS: Fault[] = [
       { cause: 'Anhängerbremsventil bläst ab', check: 'Abhorchen am Kupplungskopf', remedy: 'Ventil überholen' },
     ],
     docs: [
-      { docId: 'r7-bremsen', label: 'Register 7 — Bremsen' },
+      { docId: 'm-reparatur', page: 179, label: 'Reparaturhandbuch: Bremsen' },
     ],
   },
   {
@@ -201,8 +199,8 @@ export const FAULTS: Fault[] = [
       { cause: 'Reifendruck zu niedrig', check: 'Solldruck: 680M vorne 5,5 atü / A680g 6 atü', remedy: 'Korrigieren' },
     ],
     docs: [
-      { docId: 'r8-hydrolenkung', label: 'Register 8 — Hydrolenkung' },
-      { docId: 'r9-vorderachse', label: 'Register 9 — Vorderachse' },
+      { docId: 'm-reparatur', page: 213, label: 'Reparaturhandbuch: Hydrolenkung' },
+      { docId: 'm-reparatur', page: 237, label: 'Reparaturhandbuch: Vorderachse' },
       { docId: 'g-betrieb-2aufl', label: 'Betriebsanleitung A680g: Lenkung (ab S. 94)' },
     ],
   },
@@ -218,7 +216,7 @@ export const FAULTS: Fault[] = [
       { cause: 'Kontrollleuchte defekt (Schalter am Getriebe)', check: 'Funktion mechanisch prüfen, Schalter überbrücken', remedy: 'Schalter/Leuchtmittel (2 W) ersetzen' },
     ],
     docs: [
-      { docId: 'r3-verteilergetriebe', label: 'Register 3 — Verteilergetriebe' },
+      { docId: 'm-reparatur', page: 111, label: 'Reparaturhandbuch: Verteilergetriebe' },
       { docId: 'm-allrad', label: '680M Allrad — Beschreibung und Bedienung' },
     ],
   },
@@ -234,7 +232,7 @@ export const FAULTS: Fault[] = [
       { cause: 'Übergangswiderstand an Ladeleitung/Masse', check: 'Spannungsabfall zwischen Lichtmaschine B+ und Batterie messen', remedy: 'Anschlüsse reinigen und festziehen' },
     ],
     docs: [
-      { docId: 'r10-elektrik', label: 'Register 10 — Elektrische Anlage' },
+      { docId: 'm-reparatur', page: 263, label: 'Reparaturhandbuch: Elektrische Anlage' },
       { docId: 'g-betrieb-2aufl', label: 'Betriebsanleitung A680g: Elektrische Anlage / Schaltplan (ab S. 62)' },
     ],
   },
@@ -250,8 +248,7 @@ export const FAULTS: Fault[] = [
       { cause: 'Ventilspiel zu groß (helles Klappern)', check: 'Ventilspiel messen', remedy: 'Einstellen (0,2 / 0,3–0,35 mm kalt)' },
     ],
     docs: [
-      { docId: 'r1-motor', label: 'Register 1 — Motor' },
-      { docId: 'm-reparatur', label: 'Reparaturhandbuch 680M/M3: Motor' },
+      { docId: 'm-reparatur', page: 13, label: 'Reparaturhandbuch: Motor' },
     ],
   },
   {
@@ -265,10 +262,10 @@ export const FAULTS: Fault[] = [
       { cause: 'Gelenkwellen: Kreuzgelenke/Schiebestück ausgeschlagen (Klacken bei Lastwechsel)', check: 'Von Hand auf Spiel prüfen', remedy: 'Gelenke erneuern, Schmierplan einhalten — Register 4' },
     ],
     docs: [
-      { docId: 'r5-hinterachse', label: 'Register 5 — Hinterachse' },
-      { docId: 'r6-hinterachse', label: 'Register 6 — Hinterachse' },
-      { docId: 'r4-gelenkwellen', label: 'Register 4 — Gelenkwellen' },
-      { docId: 'r9-vorderachse', label: 'Register 9 — Vorderachse' },
+      { docId: 'm-reparatur', page: 126, label: 'Reparaturhandbuch: Hinterachse' },
+      { docId: 'm-reparatur', page: 153, label: 'Reparaturhandbuch: Hinterachse (Forts.)' },
+      { docId: 'm-reparatur', page: 121, label: 'Reparaturhandbuch: Gelenkwellen' },
+      { docId: 'm-reparatur', page: 237, label: 'Reparaturhandbuch: Vorderachse' },
     ],
   },
 ]

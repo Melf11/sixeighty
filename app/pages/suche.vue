@@ -95,7 +95,12 @@ const examples = ['Ventilspiel', 'Einspritzpumpe', 'Radbremszylinder', 'Verteile
         </div>
 
         <template v-else>
-          <p class="kennziffer mb-4">{{ data.total }} Fundstellen<template v-if="data.total > data.results.length"> — die {{ data.results.length }} relevantesten werden angezeigt</template></p>
+          <p class="kennziffer mb-4">
+            {{ data.total }} Fundstellen<template v-if="data.total > data.results.length"> — die {{ data.results.length }} relevantesten werden angezeigt</template>
+            <template v-if="data.rawTotal && data.rawTotal > data.total">
+              · {{ data.rawTotal - data.total }} inhaltsgleiche Seiten zusammengefasst
+            </template>
+          </p>
 
           <ol class="space-y-3">
             <li v-for="(r, i) in data.results" :key="`${r.docId}-${r.page}`">
@@ -112,6 +117,15 @@ const examples = ['Ventilspiel', 'Einspritzpumpe', 'Radbremszylinder', 'Verteile
                 <!-- eslint-disable-next-line vue/no-v-html -->
                 <p class="mt-2 font-mono text-xs leading-relaxed text-ink-soft" v-html="highlight(r.snippet)" />
               </NuxtLink>
+              <p v-if="r.alsoIn?.length" class="kennziffer mt-1 pl-5">
+                Gleiche Seite auch in:
+                <NuxtLink
+                  v-for="(a, ai) in r.alsoIn"
+                  :key="a.docId + a.page"
+                  :to="{ path: `/dokumente/${a.docId}`, query: { page: a.page } }"
+                  class="underline decoration-line underline-offset-2 hover:text-olive"
+                >{{ a.title }} (Bl. {{ a.page }}){{ ai < r.alsoIn.length - 1 ? ',' : '' }}&nbsp;</NuxtLink>
+              </p>
             </li>
           </ol>
 

@@ -22,13 +22,13 @@ const nav = [
       <div class="mx-auto max-w-7xl px-4 sm:px-6">
         <div class="flex items-stretch gap-4 border-x border-ink">
           <NuxtLink to="/" class="flex items-center gap-3 border-r border-ink py-3 pl-4 pr-5 shrink-0 group">
-            <!-- Steyr-Zielscheiben-Motiv -->
-            <svg viewBox="0 0 40 40" class="h-9 w-9 text-ink group-hover:rotate-90 transition-transform duration-500" aria-hidden="true">
-              <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="2.6" />
-              <circle cx="20" cy="20" r="12.5" fill="none" stroke="currentColor" stroke-width="2.6" />
-              <circle cx="20" cy="20" r="7" fill="none" stroke="currentColor" stroke-width="2.6" />
-              <circle cx="20" cy="20" r="2.2" fill="currentColor" />
-            </svg>
+            <img
+              src="/img/steyr-logo.png"
+              alt="Steyr"
+              width="40"
+              height="40"
+              class="h-10 w-10 shrink-0 transition-transform duration-500 group-hover:rotate-90"
+            >
             <div class="leading-none">
               <div class="h-display text-2xl">Steyr 680</div>
               <div class="kennziffer mt-1">Nachschlagewerk · Techn. Archiv</div>

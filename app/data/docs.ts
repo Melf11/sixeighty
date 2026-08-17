@@ -17,6 +17,8 @@ export interface DocEntry {
   category: DocCategory
   pages: number
   note?: string
+  /** Dieses Dokument ist großteils ein Auszug/Zweitscan aus einem anderen (Dok-ID) */
+  excerptOf?: string
 }
 
 export const DOCS: DocEntry[] = [
@@ -47,17 +49,17 @@ export const DOCS: DocEntry[] = [
   { id: 'g-parkdienst', title: 'Parkdienstvorschrift für Motorfahrzeuge', file: 'A680G - A680GL/Parkdienstvorschr.f.Motorfzg..pdf', models: ['A680g', 'A680gl'], category: 'wartung', pages: 13 },
 
   // ————— Werkstatt-Register 680 M —————
-  { id: 'r1-motor', title: 'Register 1 — Motor', file: '680m-doku_2025-10-15_1820/Register 1 Motor/STCN-BizHub19120409010.pdf', models: ['680M'], category: 'register', pages: 86 },
-  { id: 'r2-getriebe', title: 'Register 2 — Getriebe', file: '680m-doku_2025-10-15_1820/Register 2 Getriebe/STCN-BizHub19120311330.pdf', models: ['680M'], category: 'register', pages: 12 },
-  { id: 'r3-verteilergetriebe', title: 'Register 3 — Verteilergetriebe', file: '680m-doku_2025-10-15_1820/Register 3 Verteilergetriebe/STCN-BizHub19120311321.pdf', models: ['680M'], category: 'register', pages: 10 },
-  { id: 'r4-gelenkwellen', title: 'Register 4 — Gelenkwellen', file: '680m-doku_2025-10-15_1820/Rergister 4 Gelenkwellen/STCN-BizHub19120311320.pdf', models: ['680M'], category: 'register', pages: 2 },
-  { id: 'r5-hinterachse', title: 'Register 5 — Hinterachse', file: '680m-doku_2025-10-15_1820/Register 5 Hinterachse/STCN-BizHub19120311310.pdf', models: ['680M'], category: 'register', pages: 26 },
-  { id: 'r6-hinterachse', title: 'Register 6 — Hinterachse', file: '680m-doku_2025-10-15_1820/Register 6 Hinterachse/STCN-BizHub19120311300.pdf', models: ['680M'], category: 'register', pages: 24 },
-  { id: 'r7-bremsen', title: 'Register 7 — Bremsen', file: '680m-doku_2025-10-15_1820/Register 7 Bremsen/STCN-BizHub19120311290.pdf', models: ['680M'], category: 'register', pages: 34 },
-  { id: 'r8-hydrolenkung', title: 'Register 8 — Hydrolenkung', file: '680m-doku_2025-10-15_1820/Register 8 Hydrolenkung/STCN-BizHub19120311280.pdf', models: ['680M'], category: 'register', pages: 22 },
-  { id: 'r9-vorderachse', title: 'Register 9 — Vorderachse', file: '680m-doku_2025-10-15_1820/Register 9 Vorderachse/STCN-BizHub19120311271.pdf', models: ['680M'], category: 'register', pages: 24 },
-  { id: 'r10-elektrik', title: 'Register 10 — Elektrische Anlage', file: '680m-doku_2025-10-15_1820/Register 10 elektrische Anlage/Register 10 elektrische Anlage.pdf', models: ['680M'], category: 'register', pages: 16 },
-  { id: 'r11-oelverbrauch', title: 'Register 11 — Öl-Verbrauchsmeßfahrt', file: '680m-doku_2025-10-15_1820/Register 11 Öl-Verbrauchmeßfahrt/Öl-Verbrauchmeßfahrt.pdf', models: ['680M'], category: 'register', pages: 8 },
+  { id: 'r1-motor', title: 'Register 1 — Motor', file: '680m-doku_2025-10-15_1820/Register 1 Motor/STCN-BizHub19120409010.pdf', models: ['680M'], category: 'register', pages: 86, excerptOf: 'm-reparatur' },
+  { id: 'r2-getriebe', title: 'Register 2 — Getriebe', file: '680m-doku_2025-10-15_1820/Register 2 Getriebe/STCN-BizHub19120311330.pdf', models: ['680M'], category: 'register', pages: 12, excerptOf: 'm-reparatur' },
+  { id: 'r3-verteilergetriebe', title: 'Register 3 — Verteilergetriebe', file: '680m-doku_2025-10-15_1820/Register 3 Verteilergetriebe/STCN-BizHub19120311321.pdf', models: ['680M'], category: 'register', pages: 10, excerptOf: 'm-reparatur' },
+  { id: 'r4-gelenkwellen', title: 'Register 4 — Gelenkwellen', file: '680m-doku_2025-10-15_1820/Rergister 4 Gelenkwellen/STCN-BizHub19120311320.pdf', models: ['680M'], category: 'register', pages: 2, excerptOf: 'm-reparatur' },
+  { id: 'r5-hinterachse', title: 'Register 5 — Hinterachse', file: '680m-doku_2025-10-15_1820/Register 5 Hinterachse/STCN-BizHub19120311310.pdf', models: ['680M'], category: 'register', pages: 26, excerptOf: 'm-reparatur' },
+  { id: 'r6-hinterachse', title: 'Register 6 — Hinterachse', file: '680m-doku_2025-10-15_1820/Register 6 Hinterachse/STCN-BizHub19120311300.pdf', models: ['680M'], category: 'register', pages: 24, excerptOf: 'm-reparatur' },
+  { id: 'r7-bremsen', title: 'Register 7 — Bremsen', file: '680m-doku_2025-10-15_1820/Register 7 Bremsen/STCN-BizHub19120311290.pdf', models: ['680M'], category: 'register', pages: 34, excerptOf: 'm-reparatur' },
+  { id: 'r8-hydrolenkung', title: 'Register 8 — Hydrolenkung', file: '680m-doku_2025-10-15_1820/Register 8 Hydrolenkung/STCN-BizHub19120311280.pdf', models: ['680M'], category: 'register', pages: 22, excerptOf: 'm-reparatur' },
+  { id: 'r9-vorderachse', title: 'Register 9 — Vorderachse', file: '680m-doku_2025-10-15_1820/Register 9 Vorderachse/STCN-BizHub19120311271.pdf', models: ['680M'], category: 'register', pages: 24, excerptOf: 'm-reparatur' },
+  { id: 'r10-elektrik', title: 'Register 10 — Elektrische Anlage', file: '680m-doku_2025-10-15_1820/Register 10 elektrische Anlage/Register 10 elektrische Anlage.pdf', models: ['680M'], category: 'register', pages: 16, excerptOf: 'm-reparatur' },
+  { id: 'r11-oelverbrauch', title: 'Register 11 — Öl-Verbrauchsmeßfahrt', file: '680m-doku_2025-10-15_1820/Register 11 Öl-Verbrauchmeßfahrt/Öl-Verbrauchmeßfahrt.pdf', models: ['680M'], category: 'register', pages: 8, excerptOf: 'm-reparatur' },
   { id: 'r12-bestandteil-1', title: 'Register 12 — Bestandteilliste 1', file: '680m-doku_2025-10-15_1820/Register 12 Bestandteilliste/Bestandteilliste 1.pdf', models: ['680M'], category: 'teile', pages: 118 },
   { id: 'r12-bestandteil-2', title: 'Register 12 — Bestandteilliste 2', file: '680m-doku_2025-10-15_1820/Register 12 Bestandteilliste/Bestandteilliste 2.pdf', models: ['680M'], category: 'teile', pages: 194 },
   { id: 'r12-bestandteil-3', title: 'Register 12 — Bestandteilliste 3', file: '680m-doku_2025-10-15_1820/Register 12 Bestandteilliste/Bestandteilliste 3.pdf', models: ['680M'], category: 'teile', pages: 200 },
@@ -73,6 +75,41 @@ export const DOCS: DocEntry[] = [
 export function docById(id: string | undefined): DocEntry | undefined {
   return DOCS.find(d => d.id === id)
 }
+
+/**
+ * Dokumente für die Bibliothek: Auszüge/Zweitscans werden ausgeblendet, damit
+ * derselbe Inhalt nicht mehrfach in der Liste steht. Sie bleiben über
+ * /dokumente/<id> und die Kapitelnavigation weiterhin erreichbar.
+ */
+export const LIBRARY_DOCS: DocEntry[] = DOCS.filter(d => !d.excerptOf)
+
+/**
+ * Kapitel des Reparaturhandbuchs 680 M — entspricht der Registereinteilung des
+ * Werkstattordners; die Blattzahlen wurden durch Textabgleich der Register-Scans
+ * mit dem Handbuch ermittelt. `alt` verweist auf den separaten Register-Scan,
+ * der bei schlecht lesbaren Stellen als Zweitmeinung dient.
+ */
+export interface Chapter {
+  no: number
+  title: string
+  page: number
+  endPage: number
+  altDocId: string
+}
+
+export const REPAIR_CHAPTERS: Chapter[] = [
+  { no: 1, title: 'Motor', page: 13, endPage: 95, altDocId: 'r1-motor' },
+  { no: 2, title: 'Getriebe', page: 99, endPage: 109, altDocId: 'r2-getriebe' },
+  { no: 3, title: 'Verteilergetriebe', page: 111, endPage: 119, altDocId: 'r3-verteilergetriebe' },
+  { no: 4, title: 'Gelenkwellen', page: 121, endPage: 125, altDocId: 'r4-gelenkwellen' },
+  { no: 5, title: 'Hinterachse', page: 126, endPage: 148, altDocId: 'r5-hinterachse' },
+  { no: 6, title: 'Hinterachse (Fortsetzung)', page: 153, endPage: 171, altDocId: 'r6-hinterachse' },
+  { no: 7, title: 'Bremsen', page: 179, endPage: 210, altDocId: 'r7-bremsen' },
+  { no: 8, title: 'Hydrolenkung', page: 213, endPage: 233, altDocId: 'r8-hydrolenkung' },
+  { no: 9, title: 'Vorderachse', page: 237, endPage: 258, altDocId: 'r9-vorderachse' },
+  { no: 10, title: 'Elektrische Anlage', page: 263, endPage: 276, altDocId: 'r10-elektrik' },
+  { no: 11, title: 'Öl-Verbrauchsmeßfahrt', page: 279, endPage: 283, altDocId: 'r11-oelverbrauch' },
+]
 
 export function docUrl(doc: DocEntry, page?: number): string {
   const base = '/docs/' + doc.file.split('/').map(encodeURIComponent).join('/')

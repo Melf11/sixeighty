@@ -73,8 +73,8 @@ function toggle(id: string) {
             <div class="flex flex-wrap gap-2">
               <NuxtLink
                 v-for="d in f.docs"
-                :key="d.docId"
-                :to="`/dokumente/${d.docId}`"
+                :key="d.docId + (d.page ?? '')"
+                :to="{ path: `/dokumente/${d.docId}`, query: d.page ? { page: d.page } : {} }"
                 class="inline-block border border-line bg-card px-3 py-1.5 text-xs hover:border-ink hover:shadow-plate transition-all"
               >
                 {{ d.label }} →
