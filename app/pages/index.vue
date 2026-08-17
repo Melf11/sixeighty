@@ -43,8 +43,8 @@ const sections = [
 <template>
   <div>
     <!-- Titelblatt -->
-    <section class="sheet-in relative plate p-6 sm:p-10 overflow-hidden">
-      <div class="absolute top-4 right-4 stamp text-stamp -rotate-3">Techn. Archiv</div>
+    <section class="sheet-in plate relative overflow-hidden p-5 sm:p-10">
+      <div class="stamp absolute top-3 right-3 hidden -rotate-3 text-stamp sm:block">Techn. Archiv</div>
       <!-- Werksmarke als Wasserzeichen -->
       <img
         src="/img/steyr-logo.png"
@@ -53,7 +53,7 @@ const sections = [
         class="pointer-events-none absolute -right-16 -bottom-20 hidden w-80 opacity-[0.07] sm:block"
       >
       <p class="kennziffer mb-2">Steyr-Daimler-Puch AG · Werke Steyr</p>
-      <h1 class="h-display text-5xl sm:text-7xl max-w-3xl">
+      <h1 class="h-display max-w-3xl text-[2.1rem] leading-[1.02] xs:text-5xl sm:text-7xl">
         Steyr Lastkraftwagen<br>
         <span class="text-olive">Typ 680</span>
       </h1>
@@ -64,44 +64,44 @@ const sections = [
         <template v-else>für 680 M, 680 M3 und A 680 g</template>.
       </p>
 
-      <form class="mt-6 flex max-w-xl gap-0" @submit.prevent="search">
+      <form class="mt-5 flex max-w-xl" @submit.prevent="search">
         <input
           v-model="q"
           type="search"
-          class="field !border-r-0"
-          placeholder="Suchbegriff, z. B. »Ventilspiel«, »Radbremszylinder«, Teilenummer …"
+          class="field min-w-0 flex-1 !border-r-0"
+          placeholder="Suchen, z. B. »Ventilspiel« …"
           aria-label="Volltextsuche"
         >
-        <button type="submit" class="h-display shrink-0 border border-ink bg-olive px-6 text-lg text-card hover:bg-olive-deep transition-colors cursor-pointer">
+        <button type="submit" class="h-display shrink-0 cursor-pointer border border-ink bg-olive px-5 text-lg text-card transition-colors hover:bg-olive-deep">
           Suchen
         </button>
       </form>
 
-      <dl class="mt-8 grid grid-cols-3 max-w-xl border border-ink divide-x divide-ink bg-card">
-        <div class="p-3 text-center">
+      <dl class="mt-6 grid max-w-xl grid-cols-3 divide-x divide-ink border border-ink bg-card">
+        <div class="p-2.5 text-center sm:p-3">
           <dt class="kennziffer">Dokumente</dt>
-          <dd class="h-display text-3xl">{{ stats.docs }}</dd>
+          <dd class="h-display text-2xl sm:text-3xl">{{ stats.docs }}</dd>
         </div>
-        <div class="p-3 text-center">
+        <div class="p-2.5 text-center sm:p-3">
           <dt class="kennziffer">Seiten</dt>
-          <dd class="h-display text-3xl">{{ stats.pages.toLocaleString('de-AT') }}</dd>
+          <dd class="h-display text-2xl sm:text-3xl">{{ stats.pages.toLocaleString('de-AT') }}</dd>
         </div>
-        <div class="p-3 text-center">
+        <div class="p-2.5 text-center sm:p-3">
           <dt class="kennziffer">Fehlerbilder</dt>
-          <dd class="h-display text-3xl">{{ stats.faults }}</dd>
+          <dd class="h-display text-2xl sm:text-3xl">{{ stats.faults }}</dd>
         </div>
       </dl>
     </section>
 
     <!-- Bereiche -->
-    <section class="sheet-in sheet-in-1 mt-10">
+    <section class="sheet-in sheet-in-1 mt-8">
       <h2 class="h-display text-2xl border-b-2 border-ink pb-1 mb-4">Bereiche</h2>
       <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
         <NuxtLink
           v-for="s in sections"
           :key="s.to"
           :to="s.to"
-          class="plate group relative p-5 hover:-translate-y-0.5 hover:shadow-plate-lg transition-all"
+          class="plate group relative block p-4 transition-all hover:-translate-y-0.5 hover:shadow-plate-lg sm:p-5"
         >
           <span class="kennziffer absolute top-3 right-4">Reg. {{ s.num }}</span>
           <h3 class="h-display text-2xl group-hover:text-olive transition-colors">{{ s.title }}</h3>
@@ -111,18 +111,18 @@ const sections = [
     </section>
 
     <!-- Schnellzugriff Dokumente -->
-    <section class="sheet-in sheet-in-2 mt-10">
+    <section class="sheet-in sheet-in-2 mt-8">
       <div class="flex items-baseline justify-between border-b-2 border-ink pb-1 mb-4">
         <h2 class="h-display text-2xl">Wichtige Unterlagen<template v-if="current"> — {{ current.name }}</template></h2>
         <NuxtLink to="/dokumente" class="kennziffer hover:text-olive">Alle anzeigen →</NuxtLink>
       </div>
       <ul class="grid gap-2 sm:grid-cols-2">
         <li v-for="d in favDocs" :key="d.id">
-          <NuxtLink :to="`/dokumente/${d.id}`" class="flex items-baseline gap-3 border border-line bg-card px-4 py-2.5 hover:border-ink hover:shadow-plate transition-all">
+          <NuxtLink :to="`/dokumente/${d.id}`" class="flex flex-wrap items-baseline gap-x-3 gap-y-1 border border-line bg-card px-4 py-2.5 transition-all hover:border-ink hover:shadow-plate">
             <span class="stamp shrink-0" :class="d.category === 'teile' ? 'text-stamp' : d.category === 'reparatur' ? 'text-blueprint' : 'text-olive'">
               {{ CATEGORIES[d.category] }}
             </span>
-            <span class="truncate text-sm">{{ d.title }}</span>
+            <span class="min-w-0 flex-1 truncate text-sm">{{ d.title }}</span>
             <span class="kennziffer ml-auto shrink-0">{{ d.pages }} S.</span>
           </NuxtLink>
         </li>

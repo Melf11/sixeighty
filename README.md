@@ -79,6 +79,28 @@ sudo mkdir -p /opt/sixeighty && sudo chown "$USER" /opt/sixeighty
 git tag v1.0.0 && git push origin main --tags
 ```
 
+## Mobil & PWA
+
+Am Telefon läuft die App mit eigener Navigation statt der Desktop-Registerkarten:
+
+- **Tab-Leiste unten** (Start · Doku · Suche · Teile · Mehr) — „Mehr" öffnet ein
+  aufsteigendes Blatt mit Fehleranalyse, Modellvergleich, Wartung und Fahrzeugwahl.
+- **Fahrzeugwahl** als eigene Seite (`/fahrzeug`) statt Dropdown im Kopf.
+- **PDFs** werden am Telefon im System-Viewer geöffnet statt in einem `<iframe>` —
+  iOS Safari rendert eingebettete PDFs unzuverlässig. Ab Tablet bleibt der eingebettete
+  Betrachter.
+- Safe-Area-Abstände (Notch/Home-Indicator), 16-px-Eingabefelder gegen das iOS-Auto-Zoom,
+  Touchziele ≥ 44 px.
+
+**Installation auf dem iPhone:** Seite in Safari öffnen → Teilen → „Zum Home-Bildschirm".
+Die App startet dann ohne Browserleiste (`display: standalone`). Der Service Worker
+(`public/sw.js`) dient nur der Installierbarkeit — **Offline-Betrieb ist bewusst nicht
+implementiert**, damit nach einem Deploy nie veraltete Inhalte ausgeliefert werden.
+
+> CSS-Hinweis: Eigene Komponentenklassen (`.plate`, `.field`, `.stamp` …) liegen in
+> `@layer components`, damit Tailwind-Utilities wie `hidden` oder `w-16` sie überschreiben
+> können — ohne Layer bräuchte jede Ausnahme ein `!`.
+
 ## Umgang mit Dubletten
 
 Die Sammlung enthält denselben Inhalt teilweise mehrfach — die Werkstatt-Register 1–11

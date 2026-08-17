@@ -1,0 +1,24 @@
+{
+  "name": "Steyr 680 Nachschlagewerk",
+  "short_name": "Steyr 680",
+  "description": "Werksunterlagen, Teilenummern, Fehleranalyse und Wartung für Steyr 680 M, 680 M3 und A 680 g",
+  "lang": "de",
+  "dir": "ltr",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#f2edde",
+  "theme_color": "#f2edde",
+  "categories": ["reference", "productivity", "utilities"],
+  "icons": [
+    { "src": "/img/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "/img/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/img/icon-maskable-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ],
+  "shortcuts": [
+    { "name": "Volltextsuche", "short_name": "Suche", "url": "/suche", "icons": [{ "src": "/img/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Teilenummern", "short_name": "Teile", "url": "/teile", "icons": [{ "src": "/img/icon-192.png", "sizes": "192x192" }] },
+    { "name": "Fehleranalyse", "short_name": "Fehler", "url": "/fehleranalyse", "icons": [{ "src": "/img/icon-192.png", "sizes": "192x192" }] }
+  ]
+}

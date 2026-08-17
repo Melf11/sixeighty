@@ -43,13 +43,17 @@ function toggle(id: string) {
     <div class="space-y-3">
       <article v-for="f in filtered" :key="f.id" class="sheet-in sheet-in-2 plate">
         <button
-          class="flex w-full cursor-pointer items-baseline gap-3 p-4 text-left"
+          class="flex w-full cursor-pointer flex-wrap items-baseline gap-x-3 gap-y-1.5 p-4 text-left"
           :aria-expanded="open === f.id"
           @click="toggle(f.id)"
         >
           <span class="stamp shrink-0 text-stamp">{{ f.system }}</span>
-          <h2 class="h-display text-xl leading-tight">{{ f.symptom }}</h2>
-          <span class="kennziffer ml-auto shrink-0">{{ open === f.id ? '▴' : '▾' }} {{ f.causes.length }} Ursachen</span>
+          <span class="kennziffer shrink-0 sm:order-3 sm:ml-auto">
+            {{ open === f.id ? '▴' : '▾' }} {{ f.causes.length }} Ursachen
+          </span>
+          <h2 class="h-display w-full text-lg leading-tight sm:order-2 sm:w-auto sm:flex-1 sm:text-xl">
+            {{ f.symptom }}
+          </h2>
         </button>
 
         <div v-if="open === f.id" class="border-t border-ink px-4 pb-4">

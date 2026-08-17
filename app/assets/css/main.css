@@ -11,6 +11,9 @@
 @import "tailwindcss";
 
 @theme {
+  /* Zusätzliche Stufe für sehr schmale Geräte (iPhone SE & Co.) */
+  --breakpoint-xs: 24rem;
+
   --color-paper: #f2edde;
   --color-paper-deep: #e9e2cc;
   --color-card: #f9f5e9;
@@ -35,14 +38,24 @@
   --shadow-plate-lg: 5px 5px 0 rgb(38 35 25 / 0.14);
 }
 
+@layer base {
+
 html {
   scrollbar-gutter: stable;
+  /* iOS: Textgröße bei Drehung nicht selbsttätig anpassen */
+  -webkit-text-size-adjust: 100%;
+  /* Kein Gummiband-Effekt am Seitenende (App-Gefühl) */
+  overscroll-behavior-y: none;
 }
 
 body {
   background-color: var(--color-paper);
   color: var(--color-ink);
   font-family: var(--font-sans);
+  /* Grauer Blitz beim Antippen entfällt */
+  -webkit-tap-highlight-color: transparent;
+  /* Nie horizontal scrollen — schmale Displays kappen statt zu verschieben */
+  overflow-x: hidden;
   /* Papierkorn */
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.24 0 0 0 0 0.22 0 0 0 0 0.16 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
 }
@@ -52,7 +65,11 @@ body {
   color: var(--color-card);
 }
 
+}
+
 /* ————— Archiv-Bausteine ————— */
+@layer components {
+
 
 .plate {
   background: var(--color-card);
@@ -128,10 +145,17 @@ body {
   background: var(--color-card);
   border: 1px solid var(--color-ink);
   font-family: var(--font-mono);
-  font-size: 0.9rem;
+  /* 16px: verhindert das Auto-Zoomen von iOS Safari beim Fokussieren */
+  font-size: 16px;
   padding: 0.55rem 0.8rem;
   width: 100%;
   outline: none;
+  border-radius: 0; /* iOS rundet Felder sonst selbsttätig */
+  -webkit-appearance: none;
+  appearance: none;
+}
+@media (min-width: 640px) {
+  .field { font-size: 0.9rem; }
 }
 .field:focus {
   box-shadow: 0 0 0 2px var(--color-olive);
@@ -171,6 +195,100 @@ mark {
   padding: 0 0.1em;
 }
 
+/* ————— Mobile App-Rahmen ————— */
+
+/* Sichere Bereiche (Notch, Home-Indicator) */
+.safe-top { padding-top: env(safe-area-inset-top); }
+.safe-x {
+  padding-left: env(safe-area-inset-left);
+  padding-right: env(safe-area-inset-right);
+}
+
+/* Untere Tab-Leiste — die Haupt-Navigation am Telefon */
+.tabbar {
+  background: var(--color-card);
+  border-top: 2px solid var(--color-ink);
+  padding-bottom: env(safe-area-inset-bottom);
+  box-shadow: 0 -2px 12px rgb(38 35 25 / 0.08);
+}
+.tabbar-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 0.15rem;
+  /* Touchziel nach Apple-Empfehlung mind. 44 px */
+  min-height: 50px;
+  padding: 0.35rem 0.25rem 0.3rem;
+  font-family: var(--font-display);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-ink-faint);
+  position: relative;
+  transition: color 140ms ease;
+  -webkit-touch-callout: none;
+}
+.tabbar-item.router-link-active {
+  color: var(--color-olive);
+}
+/* Aktiv-Markierung als Registerreiter-Strich */
+.tabbar-item.router-link-active::before {
+  content: '';
+  position: absolute;
+  top: -2px;
+  left: 18%;
+  right: 18%;
+  height: 3px;
+  background: var(--color-olive);
+}
+.tabbar-item:active { color: var(--color-olive-deep); }
+
+/* Aufsteigendes Blatt (Menü „Mehr") */
+.sheet {
+  background: var(--color-card);
+  border-top: 3px double var(--color-ink);
+  padding-bottom: calc(env(safe-area-inset-bottom) + 0.5rem);
+  box-shadow: 0 -8px 30px rgb(38 35 25 / 0.18);
+}
+@keyframes sheet-up {
+  from { transform: translateY(100%); }
+  to { transform: none; }
+}
+.sheet-anim { animation: sheet-up 240ms cubic-bezier(0.32, 0.72, 0, 1) both; }
+@keyframes fade-in {
+  from { opacity: 0 }
+  to { opacity: 1 }
+}
+.fade-anim { animation: fade-in 200ms ease both; }
+
+/* Zeile im Sheet */
+.sheet-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 52px;
+  padding: 0.6rem 0.25rem;
+  border-bottom: 1px dashed var(--color-line);
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.sheet-row:last-child { border-bottom: none; }
+.sheet-row.router-link-active { color: var(--color-olive); }
+
+/* Bewegungsreduktion respektieren */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
 /* Seitenaufbau-Animation */
 @keyframes sheet-in {
   from { opacity: 0; transform: translateY(8px); }
@@ -182,3 +300,4 @@ mark {
 .sheet-in-1 { animation-delay: 60ms; }
 .sheet-in-2 { animation-delay: 120ms; }
 .sheet-in-3 { animation-delay: 180ms; }
+}

@@ -57,9 +57,9 @@ const wartungDocs = computed(() => DOCS.filter(d => d.category === 'wartung'))
       <h2 class="h-display border-b-2 border-ink pb-1 text-2xl">Wartungsunterlagen im Archiv</h2>
       <ul class="mt-3 grid gap-2 lg:grid-cols-2">
         <li v-for="d in wartungDocs" :key="d.id">
-          <NuxtLink :to="`/dokumente/${d.id}`" class="flex items-baseline gap-3 border border-line bg-card px-4 py-2.5 hover:border-ink hover:shadow-plate transition-all">
+          <NuxtLink :to="`/dokumente/${d.id}`" class="flex flex-wrap items-baseline gap-x-3 gap-y-1 border border-line bg-card px-4 py-2.5 transition-all hover:border-ink hover:shadow-plate">
             <span class="stamp shrink-0 text-olive">{{ CATEGORIES[d.category] }}</span>
-            <span class="truncate text-sm">{{ d.title }}</span>
+            <span class="min-w-0 flex-1 truncate text-sm">{{ d.title }}</span>
             <span class="kennziffer ml-auto shrink-0">{{ d.pages }} S.</span>
           </NuxtLink>
         </li>

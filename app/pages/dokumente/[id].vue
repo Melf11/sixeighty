@@ -46,9 +46,9 @@ const related = computed(() => {
 <template>
   <div v-if="doc">
     <header class="mb-4 flex flex-wrap items-end justify-between gap-3">
-      <div>
+      <div class="min-w-0">
         <NuxtLink to="/dokumente" class="kennziffer hover:text-olive">← Zurück zur Übersicht</NuxtLink>
-        <h1 class="h-display mt-1 text-3xl sm:text-4xl">{{ doc.title }}</h1>
+        <h1 class="h-display mt-1 text-2xl sm:text-4xl">{{ doc.title }}</h1>
         <p class="kennziffer mt-1">
           <span class="stamp mr-2 text-olive">{{ CATEGORIES[doc.category] }}</span>
           {{ doc.models.join(' · ') }} — {{ doc.pages }} Seiten
@@ -62,11 +62,26 @@ const related = computed(() => {
           Nicht in der Bibliothek gelistet, aber bei schlecht lesbaren Stellen als Zweitmeinung nützlich.
         </p>
       </div>
-      <form class="flex items-center gap-2" @submit.prevent="goToPage">
-        <label class="kennziffer" for="page-input">Blatt-Nr.</label>
-        <input id="page-input" v-model.number="page" type="number" min="1" :max="doc.pages" class="field !w-24 text-center">
-        <button type="submit" class="h-display cursor-pointer border border-ink bg-olive px-4 py-2 text-card hover:bg-olive-deep transition-colors">Gehe zu</button>
-        <a :href="viewerUrl" target="_blank" class="h-display border border-ink bg-card px-4 py-2 hover:shadow-plate transition-all">Neuer Tab ↗</a>
+      <form class="flex w-full items-center gap-2 sm:w-auto" @submit.prevent="goToPage">
+        <label class="kennziffer shrink-0" for="page-input">Blatt</label>
+        <input
+          id="page-input"
+          v-model.number="page"
+          type="number"
+          inputmode="numeric"
+          min="1"
+          :max="doc.pages"
+          class="field !w-16 shrink-0 text-center"
+        >
+        <button type="submit" class="h-display shrink-0 cursor-pointer border border-ink bg-olive px-4 py-2 text-card transition-colors hover:bg-olive-deep">
+          Gehe zu
+        </button>
+        <a
+          :href="viewerUrl"
+          target="_blank"
+          rel="noopener"
+          class="h-display ml-auto shrink-0 border border-ink bg-card px-4 py-2 transition-all hover:shadow-plate"
+        >Öffnen ↗</a>
       </form>
     </header>
 
@@ -81,11 +96,11 @@ const related = computed(() => {
           </NuxtLink>
         </template>
       </p>
-      <div class="flex flex-wrap gap-1.5">
+      <div class="flex snap-x gap-1.5 overflow-x-auto pb-1 sm:flex-wrap sm:overflow-visible">
         <button
           v-for="c in chapters"
           :key="c.no"
-          class="tab-register cursor-pointer !top-0 !border-b"
+          class="tab-register shrink-0 cursor-pointer snap-start !top-0 !border-b"
           :class="page >= c.page && page <= c.endPage ? '!bg-olive !text-card !border-olive-deep' : ''"
           :title="`Blatt ${c.page}–${c.endPage}`"
           @click="openChapter(c.page)"
@@ -95,11 +110,31 @@ const related = computed(() => {
       </div>
     </nav>
 
-    <div class="plate overflow-hidden">
+    <!-- Telefon: iOS zeigt PDFs im Rahmen nur unzuverlässig → im Systemviewer öffnen -->
+    <a
+      :href="viewerUrl"
+      target="_blank"
+      rel="noopener"
+      class="plate flex items-center gap-4 p-5 transition-transform active:translate-y-px md:hidden"
+    >
+      <svg viewBox="0 0 24 30" class="h-12 w-9 shrink-0 text-olive" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true">
+        <path d="M2 1h14l6 6v22H2z" /><path d="M16 1v6h6" /><path d="M6 14h12M6 18h12M6 22h8" />
+      </svg>
+      <span class="min-w-0">
+        <span class="h-display block text-xl">PDF öffnen</span>
+        <span class="kennziffer mt-1 block">
+          Blatt {{ page }} von {{ doc.pages }} · öffnet im PDF-Betrachter, dort blättern und zoomen
+        </span>
+      </span>
+      <span class="h-display ml-auto shrink-0 text-2xl text-olive" aria-hidden="true">↗</span>
+    </a>
+
+    <!-- Ab Tablet: eingebetteter Betrachter -->
+    <div class="plate hidden overflow-hidden md:block">
       <iframe
         :key="viewerKey"
         :src="viewerUrl"
-        class="h-[78vh] w-full"
+        class="h-[78dvh] w-full"
         :title="doc.title"
       />
     </div>
