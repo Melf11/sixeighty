@@ -1,0 +1,8 @@
+node_modules
+.nuxt
+.output
+.git
+.github
+680
+scripts/ocr.log
+.DS_Store

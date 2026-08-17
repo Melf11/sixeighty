@@ -1,0 +1,184 @@
+@import "@fontsource/barlow-condensed/500.css";
+@import "@fontsource/barlow-condensed/600.css";
+@import "@fontsource/barlow-condensed/700.css";
+@import "@fontsource/barlow/400.css";
+@import "@fontsource/barlow/500.css";
+@import "@fontsource/barlow/600.css";
+@import "@fontsource/barlow/700.css";
+@import "@fontsource/ibm-plex-mono/400.css";
+@import "@fontsource/ibm-plex-mono/500.css";
+@import "@fontsource/ibm-plex-mono/600.css";
+@import "tailwindcss";
+
+@theme {
+  --color-paper: #f2edde;
+  --color-paper-deep: #e9e2cc;
+  --color-card: #f9f5e9;
+  --color-ink: #262319;
+  --color-ink-soft: #5b5442;
+  --color-ink-faint: #8a8168;
+  --color-line: #cec4a5;
+  --color-line-soft: #ddd5bb;
+  --color-olive: #55603c;
+  --color-olive-deep: #3c452c;
+  --color-olive-wash: #e4e4d0;
+  --color-stamp: #a8432a;
+  --color-stamp-wash: #f2ddd2;
+  --color-blueprint: #2e5a74;
+  --color-blueprint-wash: #dde6e8;
+
+  --font-display: "Barlow Condensed", "Arial Narrow", sans-serif;
+  --font-sans: "Barlow", "Helvetica Neue", sans-serif;
+  --font-mono: "IBM Plex Mono", "Courier New", monospace;
+
+  --shadow-plate: 3px 3px 0 rgb(38 35 25 / 0.14);
+  --shadow-plate-lg: 5px 5px 0 rgb(38 35 25 / 0.14);
+}
+
+html {
+  scrollbar-gutter: stable;
+}
+
+body {
+  background-color: var(--color-paper);
+  color: var(--color-ink);
+  font-family: var(--font-sans);
+  /* Papierkorn */
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0.24 0 0 0 0 0.22 0 0 0 0 0.16 0 0 0 0.05 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+::selection {
+  background: var(--color-olive);
+  color: var(--color-card);
+}
+
+/* ————— Archiv-Bausteine ————— */
+
+.plate {
+  background: var(--color-card);
+  border: 1px solid var(--color-ink);
+  box-shadow: var(--shadow-plate);
+}
+
+.rule-double {
+  border-top: 3px double var(--color-ink);
+}
+
+.band-bottom {
+  border-bottom: 4px double var(--color-ink);
+}
+
+.rule-dashed {
+  border-top: 1px dashed var(--color-line);
+}
+
+.stamp {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  border: 1.5px solid currentColor;
+  padding: 0.15rem 0.5rem;
+  display: inline-block;
+}
+
+.kennziffer {
+  font-family: var(--font-mono);
+  font-size: 0.7rem;
+  color: var(--color-ink-faint);
+  letter-spacing: 0.06em;
+}
+
+.h-display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  line-height: 1.05;
+}
+
+/* Registerkarten-Navigation */
+.tab-register {
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.95rem;
+  padding: 0.35rem 0.9rem 0.3rem;
+  border: 1px solid var(--color-ink);
+  border-bottom: none;
+  background: var(--color-paper-deep);
+  color: var(--color-ink-soft);
+  position: relative;
+  top: 1px;
+  transition: background 120ms ease, color 120ms ease;
+}
+.tab-register:hover {
+  background: var(--color-card);
+  color: var(--color-ink);
+}
+.tab-register.router-link-active {
+  background: var(--color-olive);
+  color: var(--color-card);
+  border-color: var(--color-olive-deep);
+}
+
+/* Eingabefelder im Formularblatt-Stil */
+.field {
+  background: var(--color-card);
+  border: 1px solid var(--color-ink);
+  font-family: var(--font-mono);
+  font-size: 0.9rem;
+  padding: 0.55rem 0.8rem;
+  width: 100%;
+  outline: none;
+}
+.field:focus {
+  box-shadow: 0 0 0 2px var(--color-olive);
+}
+.field::placeholder {
+  color: var(--color-ink-faint);
+}
+
+/* Datenblatt-Tabellen */
+.sheet-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.86rem;
+}
+.sheet-table th {
+  font-family: var(--font-display);
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  text-align: left;
+  border-bottom: 2px solid var(--color-ink);
+  padding: 0.45rem 0.75rem;
+  white-space: nowrap;
+}
+.sheet-table td {
+  border-bottom: 1px dashed var(--color-line);
+  padding: 0.42rem 0.75rem;
+  vertical-align: top;
+}
+.sheet-table tr:hover td {
+  background: rgb(85 96 60 / 0.06);
+}
+
+mark {
+  background: rgb(168 67 42 / 0.18);
+  color: inherit;
+  padding: 0 0.1em;
+}
+
+/* Seitenaufbau-Animation */
+@keyframes sheet-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: none; }
+}
+.sheet-in {
+  animation: sheet-in 340ms ease-out both;
+}
+.sheet-in-1 { animation-delay: 60ms; }
+.sheet-in-2 { animation-delay: 120ms; }
+.sheet-in-3 { animation-delay: 180ms; }

@@ -1,0 +1,10 @@
+node_modules
+.nuxt
+.output
+dist
+.DS_Store
+scripts/ocr.log
+
+# Original-Scans bleiben lokal (die OCR-Kopien in public/docs sind eingecheckt,
+# damit die CI das Docker-Image ohne OCR-Lauf bauen kann)
+680/
