@@ -64,6 +64,18 @@ onUnmounted(() => {
           >
             {{ current ? current.name.replace('Steyr ', '') : 'Fahrzeug wählen' }}
           </NuxtLink>
+          <NuxtLink
+            to="/offline"
+            class="shrink-0 border border-ink bg-card p-1.5 transition-colors"
+            :class="$route.path === '/offline' ? 'bg-olive text-card' : 'text-ink'"
+            aria-label="Offline verfügbar machen"
+            title="Offline verfügbar machen"
+          >
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M7 17.5A4.5 4.5 0 0 1 6.3 8.6a6 6 0 0 1 11.5.9A3.8 3.8 0 0 1 17.5 17" />
+              <path d="M12 11v7m0 0-3-3m3 3 3-3" />
+            </svg>
+          </NuxtLink>
         </div>
 
         <!-- Ab Tablet: Kopfband wie im Werksdatenblatt -->
@@ -81,8 +93,13 @@ onUnmounted(() => {
               <div class="kennziffer mt-1">Nachschlagewerk · Techn. Archiv</div>
             </div>
           </NuxtLink>
-          <div class="hidden flex-1 items-center lg:flex">
-            <p class="h-display text-lg tracking-widest text-ink-soft">Lastkraftwagen · Schrauber- und Restaurierungshilfe</p>
+          <!-- Füllt den Raum zwischen Titel und rechter Spalte. Der Untertitel
+               erscheint erst, wenn er vollständig hineinpasst — ein mitten im
+               Wort abgeschnittener Text sähe nach Versehen aus. -->
+          <div class="hidden min-w-0 flex-1 items-center md:flex">
+            <p class="h-display hidden whitespace-nowrap text-lg tracking-widest text-ink-soft 2xl:block">
+              Lastkraftwagen · Schrauber- und Restaurierungshilfe
+            </p>
           </div>
           <div class="flex items-center border-l border-ink py-2 pl-4 pr-4">
             <label class="kennziffer mr-2" for="vehicle-select">Mein Fahrzeug</label>
@@ -91,6 +108,18 @@ onUnmounted(() => {
               <option v-for="v in VEHICLES" :key="v.id" :value="v.id">{{ v.name }}</option>
             </select>
           </div>
+          <NuxtLink
+            to="/offline"
+            class="group flex shrink-0 items-center gap-2 border-l border-ink px-4 transition-colors"
+            :class="$route.path === '/offline' ? 'bg-olive text-card' : 'hover:bg-olive-wash'"
+            title="Unterlagen aufs Gerät holen"
+          >
+            <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M7 17.5A4.5 4.5 0 0 1 6.3 8.6a6 6 0 0 1 11.5.9A3.8 3.8 0 0 1 17.5 17" />
+              <path d="M12 11v7m0 0-3-3m3 3 3-3" />
+            </svg>
+            <span class="h-display text-sm leading-none">Offline</span>
+          </NuxtLink>
         </div>
       </div>
 
