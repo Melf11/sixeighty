@@ -130,11 +130,25 @@ body {
   background: var(--color-paper-deep);
   color: var(--color-ink-soft);
   position: relative;
-  /* Reicht bis knapp unter die obere Haarlinie der Kopf-Doppellinie und deckt
-     nur diese ab; die untere bleibt sichtbar (Wert unten nachgemessen). */
-  top: 2px;
+  /* Der Reiter endet bündig auf der oberen Haarlinie — die Seitenlinien laufen
+     also nicht in den Zwischenraum hinein. Die Haarlinie selbst deckt die
+     Blende unten ab, damit sie nur unter dem Reiter unterbrochen ist. */
+  top: 0;
   transition: background 120ms ease, color 120ms ease;
 }
+/* Blende in Reiterfarbe: unterbricht die OBERE Haarlinie der Kopf-Doppellinie,
+   ohne die Seitenlinien zu verlängern. Die untere Linie bleibt unberührt und
+   läuft durch. */
+.tab-register::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: -2px;
+  height: 2px;
+  background: inherit;
+}
+
 .tab-register:hover {
   background: var(--color-card);
   color: var(--color-ink);
