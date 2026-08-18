@@ -76,8 +76,13 @@ sudo mkdir -p /opt/sixeighty && sudo chown "$USER" /opt/sixeighty
 
 ### Release
 ```bash
-git tag v1.0.0 && git push origin main --tags
+git tag v1.1.0 && git push origin main --tags
 ```
+
+Der Tag landet über die Build-Args `APP_VERSION`/`GIT_SHA`/`BUILD_TIME` im Image
+und erscheint im **Footer** als „Ausgabe v1.1.0 · 703b6bb · 18.08.2026".
+Ohne gesetzte Variablen (lokaler Dev-Server) steht dort rot „Entwicklung" —
+so ist auf einen Blick klar, ob man einen Release oder den Dev-Stand vor sich hat.
 
 ## Mobil & PWA
 

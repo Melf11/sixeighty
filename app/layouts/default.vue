@@ -4,6 +4,8 @@ import { VEHICLES, vehicleById } from '~/data/vehicles'
 const vehicle = useVehicle()
 const current = computed(() => vehicleById(vehicle.value))
 const route = useRoute()
+// Destrukturiert, damit die Refs im Template ausgepackt werden
+const { label: versionLabel, shaShort, built, isRelease } = useAppVersion()
 
 const nav = [
   { to: '/', label: 'Übersicht' },
@@ -104,12 +106,23 @@ onUnmounted(() => {
       <slot />
     </main>
 
-    <footer class="mt-8 hidden border-t border-ink md:block">
-      <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-3 px-4 py-4 sm:px-6">
-        <p class="kennziffer">
+    <footer class="safe-x mt-8 border-t border-ink">
+      <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-4 sm:px-6">
+        <p class="kennziffer hidden md:block">
           Privates Nachschlagewerk auf Basis eigener Werksunterlagen · Steyr-Daimler-Puch AG, Werk Steyr
         </p>
-        <p v-if="current" class="stamp text-olive">{{ current.name }} · {{ current.engine }}</p>
+        <p v-if="current" class="stamp hidden text-olive md:block">{{ current.name }} · {{ current.engine }}</p>
+
+        <!-- Ausgabestand: im Docker-Image vom CI gesetzt, lokal „Entwicklung“ -->
+        <p
+          class="kennziffer mx-auto w-full text-center md:mx-0 md:w-auto md:text-right"
+          :title="`Ausgabe ${versionLabel}${shaShort ? ' · Commit ' + shaShort : ''}${built ? ' · gebaut am ' + built : ''}`"
+        >
+          <span class="hidden md:inline">Ausgabe </span>
+          <span :class="isRelease ? 'text-olive' : 'text-stamp'">{{ versionLabel }}</span>
+          <template v-if="shaShort"> · {{ shaShort }}</template>
+          <template v-if="built"> · {{ built }}</template>
+        </p>
       </div>
     </footer>
 

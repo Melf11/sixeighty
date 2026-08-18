@@ -4,6 +4,17 @@ export default defineNuxtConfig({
   compatibilityDate: '2026-08-17',
   devtools: { enabled: false },
   css: ['~/assets/css/main.css'],
+
+  // Versionsangaben kommen zur Laufzeit aus der Umgebung (im Docker-Image vom
+  // CI-Build gesetzt: NUXT_PUBLIC_APP_VERSION / _GIT_SHA / _BUILD_TIME).
+  // Lokal bleiben die Defaults stehen und der Footer zeigt „Entwicklung“.
+  runtimeConfig: {
+    public: {
+      appVersion: '',
+      gitSha: '',
+      buildTime: '',
+    },
+  },
   vite: {
     plugins: [tailwindcss()],
   },
