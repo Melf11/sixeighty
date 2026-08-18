@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { FAULTS, FAULT_SYSTEMS } from '~/data/faults'
+import { SYSTEM_TAGS } from '~/data/forum'
 
 useHead({ title: 'Fehleranalyse — Steyr 680 Nachschlagewerk' })
 
@@ -73,6 +74,13 @@ function toggle(id: string) {
               </div>
             </li>
           </ol>
+
+          <!-- Was andere dazu berichten — Forum ist Beiwerk, nie Voraussetzung -->
+          <ForumHinweis
+            :q="f.symptom"
+            :tag="SYSTEM_TAGS[f.system]"
+            titel="Erfahrungen im Forum"
+          />
 
           <div class="mt-4 rule-dashed pt-3">
             <p class="kennziffer mb-1">Fundstellen im Archiv</p>

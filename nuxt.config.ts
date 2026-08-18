@@ -13,6 +13,9 @@ export default defineNuxtConfig({
       appVersion: '',
       gitSha: '',
       buildTime: '',
+      // Begleitforum. Zentral hier, damit ein Umzug eine Zeile kostet.
+      // Überschreibbar per NUXT_PUBLIC_FORUM_URL.
+      forumUrl: 'https://forum.680.melfstoecken.de',
     },
   },
   vite: {

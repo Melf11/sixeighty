@@ -137,6 +137,36 @@ bewusst 1:1, damit online und offline dieselben Treffer erscheinen.
 > `@layer components`, damit Tailwind-Utilities wie `hidden` oder `w-16` sie überschreiben
 > können — ohne Layer bräuchte jede Ausnahme ein `!`.
 
+## Begleitforum
+
+Unter **forum.680.melfstoecken.de** läuft ein Flarum-Forum
+([Repo: forum-680](../forum-680)). Es ist absichtlich eng an das Nachschlagewerk
+gekoppelt statt danebengestellt:
+
+- Die **Forumsbereiche entsprechen den Baugruppen** der Fehleranalyse. Die
+  Zuordnung steht in `app/data/forum.ts` — ändert sich drüben ein Tag-Kürzel,
+  wird es nur dort nachgezogen.
+- Jedes Fehlerbild und jedes Dokument zeigt über `<ForumHinweis>` passende
+  Themen aus dem Forum und führt mit einem Klick dorthin.
+- Gibt es zum Symptom nichts, erscheint stattdessen das Neueste aus dem
+  passenden Bereich (`fallback: true`) — besser als eine leere Fläche.
+
+Abgefragt wird über `server/api/forum/threads.get.ts`: serverseitig, fünf
+Minuten zwischengespeichert, 2,5 s Zeitlimit. **Das Forum darf die App nie
+ausbremsen** — bei Ausfall kommt eine leere Liste zurück und der Abschnitt
+entfällt einfach.
+
+Zwei Eigenheiten von Flarums Suche, die den Aufbau erklären:
+
+- `filter[tag]` wird ignoriert, sobald `filter[q]` gesetzt ist. Der Bereich muss
+  deshalb als `tag:kuerzel` **in die Suchzeichenkette** hinein.
+- Die Suche ist großzügig (findet auch bei teilweiser Übereinstimmung). Ganze
+  Symptomsätze liefern daher beliebige Treffer — die Route zieht stattdessen die
+  tragenden Begriffe heraus (Wörter ab fünf Zeichen, ohne Füllwörter).
+
+Die Adresse steht in `runtimeConfig.public.forumUrl`, überschreibbar per
+`NUXT_PUBLIC_FORUM_URL` — ein Umzug kostet eine Zeile.
+
 ## Umgang mit Dubletten
 
 Die Sammlung enthält denselben Inhalt teilweise mehrfach — die Werkstatt-Register 1–11

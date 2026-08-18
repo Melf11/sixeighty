@@ -6,6 +6,7 @@ const current = computed(() => vehicleById(vehicle.value))
 const route = useRoute()
 // Destrukturiert, damit die Refs im Template ausgepackt werden
 const { label: versionLabel, shaShort, built, isRelease } = useAppVersion()
+const forumUrl = useRuntimeConfig().public.forumUrl as string
 
 const nav = [
   { to: '/', label: 'Übersicht' },
@@ -120,6 +121,19 @@ onUnmounted(() => {
               {{ n.label }}
             </NuxtLink>
           </div>
+          <div class="flex shrink-0 items-end gap-1">
+            <a
+              :href="forumUrl"
+              target="_blank"
+              rel="noopener"
+              class="tab-register flex items-center gap-1.5 whitespace-nowrap"
+              title="Begleitforum — Fragen, Erfahrungen, Restaurierungsberichte"
+            >
+              <svg viewBox="0 0 24 24" class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M21 11.5a8.4 8.4 0 0 1-9 8.4 8.5 8.5 0 0 1-3.8-.9L3 21l1.9-5.2A8.4 8.4 0 0 1 12 3a8.4 8.4 0 0 1 9 8.5z" />
+              </svg>
+              Forum
+            </a>
           <NuxtLink to="/offline" class="tab-register flex shrink-0 items-center gap-1.5 whitespace-nowrap">
             <svg viewBox="0 0 24 24" class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
               <path d="M7 17.5A4.5 4.5 0 0 1 6.3 8.6a6 6 0 0 1 11.5.9A3.8 3.8 0 0 1 17.5 17" />
@@ -127,6 +141,7 @@ onUnmounted(() => {
             </svg>
             Offline
           </NuxtLink>
+          </div>
         </div>
       </nav>
     </header>
@@ -174,6 +189,13 @@ onUnmounted(() => {
               <span class="kennziffer block normal-case tracking-normal">{{ l.hint }}</span>
             </span>
           </NuxtLink>
+          <a :href="forumUrl" target="_blank" rel="noopener" class="sheet-row">
+            <span class="h-2.5 w-2.5 shrink-0 border border-ink" aria-hidden="true" />
+            <span class="min-w-0">
+              Forum ↗
+              <span class="kennziffer block normal-case tracking-normal">Fragen und Erfahrungen austauschen</span>
+            </span>
+          </a>
           <NuxtLink to="/offline" class="sheet-row">
             <span class="h-2.5 w-2.5 shrink-0 border border-ink" aria-hidden="true" />
             <span class="min-w-0">

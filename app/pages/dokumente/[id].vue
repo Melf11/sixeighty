@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { LIBRARY_DOCS, CATEGORIES, REPAIR_CHAPTERS, docById, docUrl } from '~/data/docs'
+import { CATEGORY_TAGS } from '~/data/forum'
 
 const route = useRoute()
 const doc = computed(() => docById(route.params.id as string))
@@ -146,6 +147,13 @@ const related = computed(() => {
         :title="doc.title"
       />
     </div>
+
+    <ForumHinweis
+      v-if="doc"
+      :q="doc.title.replace(/\s*\([^)]*\)/g, '')"
+      :tag="CATEGORY_TAGS[doc.category]"
+      titel="Dazu im Forum"
+    />
 
     <section v-if="related.length" class="mt-6">
       <h2 class="h-display border-b-2 border-ink pb-1 text-xl">Verwandte Unterlagen</h2>
