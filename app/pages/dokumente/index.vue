@@ -5,19 +5,11 @@ import { VEHICLES, vehicleById } from '~/data/vehicles'
 useHead({ title: 'Dokumente — Steyr 680 Nachschlagewerk' })
 
 const vehicle = useVehicle()
-const route = useRoute()
-const router = useRouter()
 
-const catFilter = ref<DocCategory | ''>((route.query.cat as DocCategory) || '')
-const modelFilter = ref<string>((route.query.model as string) || vehicle.value || '')
-const text = ref('')
-
-watch([catFilter, modelFilter], () => {
-  router.replace({ query: {
-    ...(catFilter.value ? { cat: catFilter.value } : {}),
-    ...(modelFilter.value ? { model: modelFilter.value } : {}),
-  } })
-})
+// Alle Filter in der URL — Zurück aus einem Dokument zeigt wieder dieselbe Auswahl
+const catFilter = useQueryState('cat') as Ref<DocCategory | ''>
+const modelFilter = useQueryState('model', vehicle.value || '')
+const text = useQueryState('titel')
 
 const filtered = computed(() => LIBRARY_DOCS.filter(d =>
   (!catFilter.value || d.category === catFilter.value)

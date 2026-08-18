@@ -10,6 +10,7 @@ interface SearchResult {
 
 interface SearchResponse {
   total: number
+  rawTotal?: number
   indexed: boolean
   results: SearchResult[]
 }
@@ -22,6 +23,9 @@ interface SearchResponse {
 export function useDocSearch(params: () => Record<string, string>) {
   const data = ref<SearchResponse | null>(null)
   const pending = ref(false)
+  // Fehler nicht verschlucken: ein stiller „0 Treffer“ sieht aus wie ein
+  // legitimes Ergebnis und verdeckt Serverprobleme.
+  const error = ref<string | null>(null)
   let timer: ReturnType<typeof setTimeout> | null = null
   let requestId = 0
 
@@ -30,6 +34,7 @@ export function useDocSearch(params: () => Record<string, string>) {
     const q = (p.q ?? '').trim()
     if (q.length < 2) {
       data.value = null
+      error.value = null
       pending.value = false
       return
     }
@@ -37,9 +42,15 @@ export function useDocSearch(params: () => Record<string, string>) {
     pending.value = true
     try {
       const res = await $fetch<SearchResponse>('/api/search', { query: p })
-      if (id === requestId) data.value = res
-    } catch {
-      if (id === requestId) data.value = { total: 0, indexed: true, results: [] }
+      if (id === requestId) {
+        data.value = res
+        error.value = null
+      }
+    } catch (e: unknown) {
+      if (id === requestId) {
+        data.value = null
+        error.value = e instanceof Error ? e.message : 'Unbekannter Fehler'
+      }
     } finally {
       if (id === requestId) pending.value = false
     }
@@ -55,5 +66,5 @@ export function useDocSearch(params: () => Record<string, string>) {
     run() // Falls die Seite mit ?q=… geladen wird
   })
 
-  return { data, pending }
+  return { data, pending, error }
 }

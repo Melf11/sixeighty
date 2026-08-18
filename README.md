@@ -126,3 +126,20 @@ aus Register 12 (bis 100 % einzigartig) und der Ersatzteilkatalog der Schweizer 
 - `app/data/faults.ts` — Fehleranalyse-Datenbank
 - `app/data/wartung.ts` — Wartungspläne und bekannte Zulieferteile-Nummern
 - `app/data/docs.ts` — Dokumenten-Manifest (Titel, Modell, Kategorie, Seitenzahl)
+
+## Zustand & Browser-Navigation
+
+Filter, Suchbegriffe und die Blattnummer im Betrachter leben **in der URL**, nicht
+nur in einem `ref`. Sonst wäre der Stand nach „Zurück" verloren, weil die
+Seitenkomponente neu aufgebaut wird.
+
+Dafür gibt es `useQueryState(key)` bzw. `useQueryNumber(key)`
+(`app/composables/useQueryState.ts`):
+
+- schreibt Änderungen mit `router.replace` (kein History-Eintrag pro Tastendruck)
+- liest bei Vor/Zurück aus der URL zurück
+- bündelt gleichzeitige Änderungen in einem Microtask, damit sich zwei Filter
+  nicht gegenseitig aus der URL werfen
+
+Verwendet auf `/suche`, `/teile`, `/dokumente`, `/fehleranalyse` und im
+Dokumentbetrachter. Nebeneffekt: Jeder Stand ist als Link teilbar.

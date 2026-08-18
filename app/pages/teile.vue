@@ -6,11 +6,12 @@ import { KNOWN_PARTS } from '~/data/wartung'
 useHead({ title: 'Teilenummern — Steyr 680 Nachschlagewerk' })
 
 const vehicle = useVehicle()
-const route = useRoute()
-const q = ref((route.query.q as string) || '')
-const model = ref<string>(vehicle.value || '')
+// Suchbegriff und Modellfilter stehen in der URL — so überleben sie
+// „Zurück“, Neuladen und lassen sich als Link weitergeben.
+const q = useQueryState('q')
+const model = useQueryState('model', vehicle.value || '')
 
-const { data, pending } = useDocSearch(() => ({
+const { data, pending, error } = useDocSearch(() => ({
   q: q.value.trim(),
   cat: 'teile',
   model: model.value,
@@ -21,7 +22,7 @@ const partDocs = computed(() => DOCS.filter(d =>
   d.category === 'teile' && (!model.value || d.models.includes(model.value)),
 ))
 
-const partFilter = ref('')
+const partFilter = useQueryState('teil')
 const filteredKnown = computed(() => {
   const f = partFilter.value.toLowerCase()
   if (!f) return KNOWN_PARTS
@@ -64,6 +65,10 @@ function highlight(text: string): string {
 
       <div v-if="q.trim().length >= 2" class="mt-4">
         <p v-if="pending" class="kennziffer animate-pulse">Suche läuft …</p>
+        <div v-else-if="error" class="border border-stamp bg-stamp-wash p-4 text-sm">
+          <p class="stamp mb-2 text-stamp">Suche fehlgeschlagen</p>
+          <p class="text-ink-soft">{{ error }}</p>
+        </div>
         <template v-else-if="data">
           <div v-if="!data.indexed" class="border border-stamp bg-stamp-wash p-4 text-sm text-ink-soft">
             Volltextindex noch nicht erzeugt — nach Abschluss der OCR <code class="font-mono">npm run index</code> ausführen.

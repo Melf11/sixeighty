@@ -3,9 +3,11 @@ import { FAULTS, FAULT_SYSTEMS } from '~/data/faults'
 
 useHead({ title: 'Fehleranalyse — Steyr 680 Nachschlagewerk' })
 
-const system = ref<string>('')
-const q = ref('')
-const open = ref<string | null>(null)
+// Auch das aufgeklappte Fehlerbild steht in der URL: Wer aus einem Handbuch
+// zurückkommt, landet wieder im selben geöffneten Abschnitt.
+const system = useQueryState('bg')
+const q = useQueryState('q')
+const open = useQueryState('f')
 
 const filtered = computed(() => FAULTS.filter(f =>
   (!system.value || f.system === system.value)
@@ -15,7 +17,7 @@ const filtered = computed(() => FAULTS.filter(f =>
 ))
 
 function toggle(id: string) {
-  open.value = open.value === id ? null : id
+  open.value = open.value === id ? '' : id
 }
 </script>
 

@@ -80,9 +80,12 @@ export default defineEventHandler(async (event) => {
   // Inhaltsgleiche Seiten (z. B. Werkstatt-Register = Kopien aus dem
   // Reparaturhandbuch) zu einem Treffer zusammenfassen. Angezeigt wird der
   // bestbewertete Fund; die weiteren Fundorte hängen als `alsoIn` daran.
+  //
+  // Wichtig: Es werden ALLE Fundstellen durchlaufen, damit die Gesamtzahl nach
+  // Dublettenabgleich stimmt — ausgeliefert werden aber nur die ersten `max`.
   const max = Math.min(Number(limit) || 40, 100)
-  const seenCluster = new Map<number, number>() // Cluster → Index in results
-  const results: Array<{
+
+  interface Hit {
     docId: string
     title: string
     category: string
@@ -91,29 +94,37 @@ export default defineEventHandler(async (event) => {
     score: number
     snippet: string
     alsoIn: Array<{ docId: string, title: string, page: number }>
-  }> = []
-  let collapsed = 0
+  }
+
+  const results: Hit[] = []
+  const seenCluster = new Map<number, Hit | null>() // null = jenseits der Anzeigegrenze
+  let distinct = 0
 
   for (const r of filtered) {
-    const entry = pages.get(String(r.id))!
-    const meta = docMeta.get(entry.d)!
+    const entry = pages.get(String(r.id))
+    if (!entry) continue
+    const meta = docMeta.get(entry.d)
+    if (!meta) continue
 
-    if (entry.c !== undefined) {
-      const existing = seenCluster.get(entry.c)
-      if (existing !== undefined) {
-        // Dublette: nur als alternativer Fundort vermerken
-        const target = results[existing]!
-        if (target.alsoIn.length < 4 && !target.alsoIn.some(a => a.docId === entry.d)) {
-          target.alsoIn.push({ docId: entry.d, title: meta.title, page: entry.p })
-        }
-        collapsed++
-        continue
+    // Bereits gesehener Cluster → nur als weiteren Fundort vermerken
+    if (entry.c !== undefined && seenCluster.has(entry.c)) {
+      const target = seenCluster.get(entry.c)
+      if (target && target.alsoIn.length < 4 && !target.alsoIn.some(a => a.docId === entry.d)) {
+        target.alsoIn.push({ docId: entry.d, title: meta.title, page: entry.p })
       }
-      seenCluster.set(entry.c, results.length)
+      continue
     }
 
-    if (results.length >= max) { collapsed++; continue }
-    results.push({
+    distinct++
+
+    // Über der Anzeigegrenze: Cluster trotzdem merken (als null), damit spätere
+    // Dubletten desselben Clusters nicht erneut als eigener Treffer zählen.
+    if (results.length >= max) {
+      if (entry.c !== undefined) seenCluster.set(entry.c, null)
+      continue
+    }
+
+    const hit: Hit = {
       docId: entry.d,
       title: meta.title,
       category: meta.category,
@@ -122,11 +133,13 @@ export default defineEventHandler(async (event) => {
       score: Math.round(r.score * 10) / 10,
       snippet: makeSnippet(entry.t, r.queryTerms),
       alsoIn: [],
-    })
+    }
+    if (entry.c !== undefined) seenCluster.set(entry.c, hit)
+    results.push(hit)
   }
 
   return {
-    total: filtered.length - collapsed,
+    total: distinct,
     rawTotal: filtered.length,
     indexed,
     results,

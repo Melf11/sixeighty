@@ -10,13 +10,21 @@ if (!doc.value) {
 
 useHead({ title: () => `${doc.value?.title ?? 'Dokument'} — Steyr 680` })
 
-const page = ref<number>(Number(route.query.page) || 1)
+// Blattnummer steht in der URL: „Zurück“ aus einem anderen Dokument und ein
+// Neuladen landen wieder auf demselben Blatt, und Treffer lassen sich verlinken.
+const page = useQueryNumber('page', 1)
+
 const viewerUrl = computed(() => doc.value ? docUrl(doc.value, page.value) : '')
-// Key erzwingt Reload des iframes bei Seitensprung
+
+// Key erzwingt den Reload des iframes — auch bei Vor/Zurück im Browser,
+// deshalb am Blattwechsel selbst und nicht nur am Formular aufgehängt.
 const viewerKey = ref(0)
+watch(page, () => { viewerKey.value++ })
+
 function goToPage() {
-  page.value = Math.min(Math.max(1, page.value || 1), doc.value!.pages)
-  viewerKey.value++
+  const clamped = Math.min(Math.max(1, page.value || 1), doc.value!.pages)
+  if (clamped === page.value) viewerKey.value++ // gleiche Seite: trotzdem neu laden
+  else page.value = clamped
 }
 
 // Kapitelnavigation: entspricht der Registereinteilung des Werkstattordners

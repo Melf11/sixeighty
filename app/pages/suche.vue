@@ -4,27 +4,19 @@ import { VEHICLES } from '~/data/vehicles'
 
 useHead({ title: 'Volltextsuche — Steyr 680 Nachschlagewerk' })
 
-const route = useRoute()
-const router = useRouter()
 const vehicle = useVehicle()
 
-const q = ref((route.query.q as string) || '')
-const cat = ref<DocCategory | ''>((route.query.cat as DocCategory) || '')
-const model = ref<string>((route.query.model as string) || '')
+// Zustand lebt in der URL (siehe useQueryState) — überlebt Zurück und Reload
+const q = useQueryState('q')
+const cat = useQueryState('cat') as Ref<DocCategory | ''>
+const model = useQueryState('model')
 
-const { data, pending } = useDocSearch(() => ({
+const { data, pending, error } = useDocSearch(() => ({
   q: q.value.trim(),
   cat: cat.value,
   model: model.value,
 }))
 
-watch([q, cat, model], () => {
-  router.replace({ query: {
-    ...(q.value ? { q: q.value } : {}),
-    ...(cat.value ? { cat: cat.value } : {}),
-    ...(model.value ? { model: model.value } : {}),
-  } })
-})
 
 function highlight(text: string): string {
   const terms = q.value.trim().split(/\s+/).filter(t => t.length > 1)
@@ -84,6 +76,11 @@ const examples = ['Ventilspiel', 'Einspritzpumpe', 'Radbremszylinder', 'Verteile
 
     <div v-else class="mt-6">
       <p v-if="pending" class="kennziffer animate-pulse">Suche läuft …</p>
+
+      <div v-else-if="error" class="plate border-stamp p-5 text-sm">
+        <p class="stamp mb-2 text-stamp">Suche fehlgeschlagen</p>
+        <p class="text-ink-soft">{{ error }}</p>
+      </div>
 
       <template v-else-if="data">
         <div v-if="!data.indexed" class="plate border-stamp p-5 text-sm">
