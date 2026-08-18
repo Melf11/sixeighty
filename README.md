@@ -98,9 +98,40 @@ Am Telefon läuft die App mit eigener Navigation statt der Desktop-Registerkarte
   Touchziele ≥ 44 px.
 
 **Installation auf dem iPhone:** Seite in Safari öffnen → Teilen → „Zum Home-Bildschirm".
-Die App startet dann ohne Browserleiste (`display: standalone`). Der Service Worker
-(`public/sw.js`) dient nur der Installierbarkeit — **Offline-Betrieb ist bewusst nicht
-implementiert**, damit nach einem Deploy nie veraltete Inhalte ausgeliefert werden.
+Die App startet dann ohne Browserleiste (`display: standalone`).
+
+### Offline-Betrieb
+
+Unter **`/offline`** entscheidet der Nutzer, was mitkommt — nichts wird ungefragt
+geladen. Drei Stufen:
+
+| Stufe | Größe | Inhalt |
+|---|---|---|
+| Die App selbst | ~1,5 MB | Alle Seiten inkl. Fehleranalyse, Modellvergleich, Wartung, Normteile |
+| Volltextsuche | ~2 MB | 4.491 Seiten; Index wandert in IndexedDB, Suche läuft dann im Gerät |
+| PDFs | 17–20 MB je Werkstatt-Paket | Einzeln wählbar oder als Paket je Fahrzeug |
+
+Drei Ablagen mit unterschiedlicher Lebensdauer:
+
+- `shell-<version>` (Cache API) — **an die Ausgabe gekoppelt**: nach einem Deploy
+  wird der alte Stand verworfen, es läuft nie eine Mischung aus altem und neuem Code.
+- `sixeighty-docs` (Cache API) — die gewählten PDFs, **überleben Updates**; die Scans
+  ändern sich nie und 200 MB erneut zu laden wäre unsinnig.
+- IndexedDB — der Suchindex, mit Versionsstempel. Weicht er von der App-Version ab,
+  weist `/offline` darauf hin und bietet „Index erneuern" an.
+
+`/api/*` geht immer ans Netz, damit weder Server-Suche noch Index-Download je aus
+einem veralteten Cache beantwortet werden.
+
+**Wichtig beim Bereitstellen der App-Hülle:** Es genügt nicht, das HTML zu cachen —
+ohne die JS-Bausteine der einzelnen Seiten lassen sich offline nur Seiten öffnen, die
+man vorher schon besucht hat. `warmAppShell()` holt deshalb beides
+(`preloadRouteComponents` + HTML je Route).
+
+Die Suche nutzt den lokalen Index, sobald er da ist (auch online — schneller), und
+fällt bei Serverausfall darauf zurück. Ergebnisse aus dem Gerät sind mit „vom Gerät"
+gekennzeichnet. Die Logik in `useLocalSearch.ts` spiegelt `server/api/search.get.ts`
+bewusst 1:1, damit online und offline dieselben Treffer erscheinen.
 
 > CSS-Hinweis: Eigene Komponentenklassen (`.plate`, `.field`, `.stamp` …) liegen in
 > `@layer components`, damit Tailwind-Utilities wie `hidden` oder `w-16` sie überschreiben

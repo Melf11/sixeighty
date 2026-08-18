@@ -11,7 +11,7 @@ const vehicle = useVehicle()
 const q = useQueryState('q')
 const model = useQueryState('model', vehicle.value || '')
 
-const { data, pending, error } = useDocSearch(() => ({
+const { data, pending, error, offline } = useDocSearch(() => ({
   q: q.value.trim(),
   cat: 'teile',
   model: model.value,
@@ -74,7 +74,10 @@ function highlight(text: string): string {
             Volltextindex noch nicht erzeugt — nach Abschluss der OCR <code class="font-mono">npm run index</code> ausführen.
           </div>
           <template v-else>
-            <p class="kennziffer mb-3">{{ data.total }} Fundstellen in den Teilekatalogen</p>
+            <p class="kennziffer mb-3">
+              <span v-if="offline" class="stamp mr-2 text-olive">vom Gerät</span>
+              {{ data.total }} Fundstellen in den Teilekatalogen
+            </p>
             <ol class="space-y-2">
               <li v-for="r in data.results" :key="`${r.docId}-${r.page}`">
                 <NuxtLink

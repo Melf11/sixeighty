@@ -31,7 +31,10 @@ const moreLinks = [
 ]
 
 const moreOpen = ref(false)
-const moreActive = computed(() => moreLinks.some(l => route.path.startsWith(l.to)))
+const moreActive = computed(() =>
+  moreLinks.some(l => route.path.startsWith(l.to))
+  || ['/offline', '/fahrzeug'].includes(route.path),
+)
 
 // Beim Navigieren schließen; solange offen, Hintergrund nicht scrollen
 watch(() => route.fullPath, () => { moreOpen.value = false })
@@ -110,6 +113,7 @@ onUnmounted(() => {
       <div class="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-4 sm:px-6">
         <p class="kennziffer hidden md:block">
           Privates Nachschlagewerk auf Basis eigener Werksunterlagen · Steyr-Daimler-Puch AG, Werk Steyr
+          · <NuxtLink to="/offline" class="underline underline-offset-2 hover:text-olive">Offline verfügbar machen</NuxtLink>
         </p>
         <p v-if="current" class="stamp hidden text-olive md:block">{{ current.name }} · {{ current.engine }}</p>
 
@@ -141,6 +145,13 @@ onUnmounted(() => {
             <span class="min-w-0">
               {{ l.label }}
               <span class="kennziffer block normal-case tracking-normal">{{ l.hint }}</span>
+            </span>
+          </NuxtLink>
+          <NuxtLink to="/offline" class="sheet-row">
+            <span class="h-2.5 w-2.5 shrink-0 border border-ink" aria-hidden="true" />
+            <span class="min-w-0">
+              Offline verfügbar
+              <span class="kennziffer block normal-case tracking-normal">Unterlagen aufs Gerät holen</span>
             </span>
           </NuxtLink>
           <NuxtLink to="/fahrzeug" class="sheet-row">

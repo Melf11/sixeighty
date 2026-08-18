@@ -11,7 +11,7 @@ const q = useQueryState('q')
 const cat = useQueryState('cat') as Ref<DocCategory | ''>
 const model = useQueryState('model')
 
-const { data, pending, error } = useDocSearch(() => ({
+const { data, pending, error, offline } = useDocSearch(() => ({
   q: q.value.trim(),
   cat: cat.value,
   model: model.value,
@@ -93,6 +93,7 @@ const examples = ['Ventilspiel', 'Einspritzpumpe', 'Radbremszylinder', 'Verteile
 
         <template v-else>
           <p class="kennziffer mb-4">
+            <span v-if="offline" class="stamp mr-2 text-olive">vom Gerät</span>
             {{ data.total }} Fundstellen<template v-if="data.total > data.results.length"> — die {{ data.results.length }} relevantesten werden angezeigt</template>
             <template v-if="data.rawTotal && data.rawTotal > data.total">
               · {{ data.rawTotal - data.total }} inhaltsgleiche Seiten zusammengefasst
