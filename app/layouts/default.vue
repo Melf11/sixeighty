@@ -115,13 +115,17 @@ onUnmounted(() => {
 
       <!-- Registerkarten nur ab Tablet: Bereiche links, Offline rechts -->
       <nav class="mx-auto hidden max-w-7xl px-4 pt-3 md:block sm:px-6">
-        <div class="flex items-end justify-between gap-3">
-          <div class="flex gap-1 overflow-x-auto">
+        <!-- Kein Scroll-Container: der beschnitt die Reiter an der Unterkante,
+             wodurch sie die Doppellinie nicht durchbrachen — und erzwang
+             nebenbei einen senkrechten Rollbalken (overflow-x:auto setzt die
+             andere Achse implizit auf auto). Bei wenig Platz wird umbrochen. -->
+        <div class="flex flex-wrap items-end gap-x-3 gap-y-1.5">
+          <div class="flex flex-wrap gap-1">
             <NuxtLink v-for="n in nav" :key="n.to" :to="n.to" class="tab-register whitespace-nowrap">
               {{ n.label }}
             </NuxtLink>
           </div>
-          <div class="flex shrink-0 items-end gap-1">
+          <div class="ml-auto flex shrink-0 items-end gap-1">
             <a
               :href="forumUrl"
               target="_blank"
