@@ -93,11 +93,11 @@ onUnmounted(() => {
               <div class="kennziffer mt-1">Nachschlagewerk · Techn. Archiv</div>
             </div>
           </NuxtLink>
-          <!-- Füllt den Raum zwischen Titel und rechter Spalte. Der Untertitel
+          <!-- Füllt den Raum zwischen Titel und Fahrzeugwahl. Der Untertitel
                erscheint erst, wenn er vollständig hineinpasst — ein mitten im
                Wort abgeschnittener Text sähe nach Versehen aus. -->
           <div class="hidden min-w-0 flex-1 items-center md:flex">
-            <p class="h-display hidden whitespace-nowrap text-lg tracking-widest text-ink-soft 2xl:block">
+            <p class="h-display hidden whitespace-nowrap text-lg tracking-widest text-ink-soft xl:block">
               Lastkraftwagen · Schrauber- und Restaurierungshilfe
             </p>
           </div>
@@ -108,26 +108,24 @@ onUnmounted(() => {
               <option v-for="v in VEHICLES" :key="v.id" :value="v.id">{{ v.name }}</option>
             </select>
           </div>
-          <NuxtLink
-            to="/offline"
-            class="group flex shrink-0 items-center gap-2 border-l border-ink px-4 transition-colors"
-            :class="$route.path === '/offline' ? 'bg-olive text-card' : 'hover:bg-olive-wash'"
-            title="Unterlagen aufs Gerät holen"
-          >
-            <svg viewBox="0 0 24 24" class="h-5 w-5 shrink-0" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-              <path d="M7 17.5A4.5 4.5 0 0 1 6.3 8.6a6 6 0 0 1 11.5.9A3.8 3.8 0 0 1 17.5 17" />
-              <path d="M12 11v7m0 0-3-3m3 3 3-3" />
-            </svg>
-            <span class="h-display text-sm leading-none">Offline</span>
-          </NuxtLink>
+
         </div>
       </div>
 
-      <!-- Registerkarten nur ab Tablet -->
-      <nav class="mx-auto hidden max-w-7xl overflow-x-auto px-4 pt-3 md:block sm:px-6">
-        <div class="flex min-w-max gap-1">
-          <NuxtLink v-for="n in nav" :key="n.to" :to="n.to" class="tab-register whitespace-nowrap">
-            {{ n.label }}
+      <!-- Registerkarten nur ab Tablet: Bereiche links, Offline rechts -->
+      <nav class="mx-auto hidden max-w-7xl px-4 pt-3 md:block sm:px-6">
+        <div class="flex items-end justify-between gap-3">
+          <div class="flex gap-1 overflow-x-auto">
+            <NuxtLink v-for="n in nav" :key="n.to" :to="n.to" class="tab-register whitespace-nowrap">
+              {{ n.label }}
+            </NuxtLink>
+          </div>
+          <NuxtLink to="/offline" class="tab-register flex shrink-0 items-center gap-1.5 whitespace-nowrap">
+            <svg viewBox="0 0 24 24" class="h-4 w-4 shrink-0" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M7 17.5A4.5 4.5 0 0 1 6.3 8.6a6 6 0 0 1 11.5.9A3.8 3.8 0 0 1 17.5 17" />
+              <path d="M12 11v7m0 0-3-3m3 3 3-3" />
+            </svg>
+            Offline
           </NuxtLink>
         </div>
       </nav>
