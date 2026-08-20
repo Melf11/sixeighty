@@ -167,6 +167,24 @@ Zwei Eigenheiten von Flarums Suche, die den Aufbau erklären:
 Die Adresse steht in `runtimeConfig.public.forumUrl`, überschreibbar per
 `NUXT_PUBLIC_FORUM_URL` — ein Umzug kostet eine Zeile.
 
+**Für die Entwicklung** gehört in die `.env` (Vorlage: `.env.example`):
+
+```
+NUXT_PUBLIC_FORUM_URL=http://localhost:8888
+```
+
+Sonst führt der Forum-Reiter im Dev-Betrieb auf die öffentliche Instanz. Das
+lokale Forum startet man im Nachbarprojekt:
+
+```bash
+cd ../forum-680 && docker compose -f docker-compose.dev.yml up -d
+```
+
+Das Fahrzeug-Cookie wird unter der Domain `680.melfstoecken.de` gesetzt (siehe
+`useVehicle`), damit das Forum auf der Unterdomain die Auswahl anzeigen kann.
+Auf localhost bleibt die Domain-Angabe weg — sonst lehnt der Browser das
+Cookie ab.
+
 ## Umgang mit Dubletten
 
 Die Sammlung enthält denselben Inhalt teilweise mehrfach — die Werkstatt-Register 1–11
