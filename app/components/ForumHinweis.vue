@@ -52,8 +52,6 @@ function datum(iso: string | null) {
       <li v-for="t in threads" :key="t.id">
         <a
           :href="t.url"
-          target="_blank"
-          rel="noopener"
           class="flex flex-wrap items-baseline gap-x-3 gap-y-1 border border-line bg-card px-4 py-2.5 transition-all hover:border-ink hover:shadow-plate"
         >
           <svg viewBox="0 0 24 24" class="h-4 w-4 shrink-0 text-olive" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
@@ -75,14 +73,10 @@ function datum(iso: string | null) {
       <a
         v-if="tag"
         :href="forumTagUrl(forumUrl, tag)"
-        target="_blank"
-        rel="noopener"
         class="h-display border border-ink bg-olive px-4 py-2 text-sm text-card transition-colors hover:bg-olive-deep"
       >Im Forum besprechen ↗</a>
       <a
         :href="forumSearchUrl(forumUrl, q, tag)"
-        target="_blank"
-        rel="noopener"
         class="h-display border border-ink bg-card px-4 py-2 text-sm transition-all hover:shadow-plate"
       >Forum durchsuchen ↗</a>
     </div>

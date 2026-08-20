@@ -126,10 +126,10 @@ onUnmounted(() => {
             </NuxtLink>
           </div>
           <div class="ml-auto flex shrink-0 items-end gap-1">
+            <!-- Kein neuer Tab: Das Forum trägt denselben Kopf und ist als
+                 Unterseite gedacht — ein Tabwechsel bräche diesen Eindruck. -->
             <a
               :href="forumUrl"
-              target="_blank"
-              rel="noopener"
               class="tab-register flex items-center gap-1.5 whitespace-nowrap"
               title="Begleitforum — Fragen, Erfahrungen, Restaurierungsberichte"
             >
@@ -193,7 +193,7 @@ onUnmounted(() => {
               <span class="kennziffer block normal-case tracking-normal">{{ l.hint }}</span>
             </span>
           </NuxtLink>
-          <a :href="forumUrl" target="_blank" rel="noopener" class="sheet-row">
+          <a :href="forumUrl" class="sheet-row">
             <span class="h-2.5 w-2.5 shrink-0 border border-ink" aria-hidden="true" />
             <span class="min-w-0">
               Forum ↗
